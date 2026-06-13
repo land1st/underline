@@ -20,7 +20,7 @@
   --t100:#e1f5ee;--t400:#1d9e75;--t600:#0f6e56;
   --g50:#f8f7f4;--g100:#f1efe8;--g200:#d3d1c7;--g400:#888780;--g700:#444441;--g900:#1a1916;
 }
-html,body{background:var(--g50);font-family:'Pretendard',-apple-system,sans-serif;color:var(--g900);font-size:15px;line-height:1.5}
+html,body{background:var(--g50);font-family:'Pretendard',-apple-system,sans-serif;color:var(--g900);font-size:16px;line-height:1.5}
 .app{max-width:480px;margin:0 auto;background:var(--g50);min-height:100vh}
 
 /* 헤더 */
@@ -71,21 +71,21 @@ html,body{background:var(--g50);font-family:'Pretendard',-apple-system,sans-seri
 
 /* 리마인드 카드 (발췌탭 상단) */
 .remind-hero{background:var(--primary);border-radius:12px;padding:16px;margin-bottom:12px}
-.remind-hero-eye{font-size:10px;color:#9d97e8;font-weight:500;letter-spacing:.5px;margin-bottom:8px}
-.remind-hero-q{font-size:14px;color:#fff;line-height:1.8;font-weight:400}
-.remind-hero-q::before{content:'\201C';font-size:20px;color:#9d97e8;vertical-align:-4px;margin-right:2px}
-.remind-hero-q::after{content:'\201D';font-size:20px;color:#9d97e8;vertical-align:-4px;margin-left:2px}
-.remind-hero-src{font-size:11px;color:#9d97e8;margin-top:8px}
-.remind-hero-acts{display:flex;justify-content:flex-end;gap:6px;margin-top:12px}
-.remind-hero-btn{font-size:11px;padding:5px 12px;border-radius:20px;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.1);color:#fff;cursor:pointer;font-family:'Pretendard',sans-serif;transition:background .15s}
+.remind-hero-eye{font-size:11px;color:#9d97e8;font-weight:500;letter-spacing:.5px;margin-bottom:10px}
+.remind-hero-q{font-size:17px;color:#fff;line-height:1.8;font-weight:400}
+.remind-hero-q::before{content:'\201C';font-size:24px;color:#9d97e8;vertical-align:-5px;margin-right:2px}
+.remind-hero-q::after{content:'\201D';font-size:24px;color:#9d97e8;vertical-align:-5px;margin-left:2px}
+.remind-hero-src{font-size:13px;color:#9d97e8;margin-top:10px}
+.remind-hero-acts{display:flex;justify-content:flex-end;gap:6px;margin-top:14px}
+.remind-hero-btn{font-size:12px;padding:6px 14px;border-radius:20px;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.1);color:#fff;cursor:pointer;font-family:'Pretendard',sans-serif;transition:background .15s}
 .remind-hero-btn:hover{background:rgba(255,255,255,.2)}
 
 /* 발췌 아이템 */
 .group-hd{font-size:11px;font-weight:600;color:var(--g400);letter-spacing:.3px;padding:8px 0 6px;border-top:1px solid var(--g100);margin-top:4px}
 .group-hd:first-child{border-top:none;margin-top:0}
-.excerpt-item{background:#fff;border-radius:10px;border:1px solid var(--g200);padding:14px;margin-bottom:8px;position:relative}
+.excerpt-item{background:#fff;border-radius:10px;border:1px solid var(--g200);padding:14px;margin-bottom:8px;position:relative;cursor:pointer}
 .excerpt-item:hover .excerpt-del{opacity:1}
-.excerpt-q{font-size:14px;color:var(--g900);line-height:1.8}
+.excerpt-q{font-size:14px;color:var(--g900);line-height:1.8;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .excerpt-q::before{content:'\201C';font-size:19px;color:var(--primary);vertical-align:-3px;margin-right:2px}
 .excerpt-q::after{content:'\201D';font-size:19px;color:var(--primary);vertical-align:-3px;margin-left:2px}
 .excerpt-foot{display:flex;align-items:center;gap:7px;margin-top:9px;flex-wrap:wrap}
@@ -93,6 +93,22 @@ html,body{background:var(--g50);font-family:'Pretendard',-apple-system,sans-seri
 .excerpt-src::before{content:'— '}
 .excerpt-del{position:absolute;top:10px;right:10px;background:none;border:none;font-size:14px;color:var(--g200);cursor:pointer;opacity:0;transition:opacity .15s;line-height:1;padding:2px 4px}
 .excerpt-del:hover{color:#e24b4a}
+
+/* 발췌 전문 팝업 */
+.excerpt-popup-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:300;align-items:flex-end;justify-content:center}
+.excerpt-popup-overlay.open{display:flex}
+.excerpt-popup{background:#fff;border-radius:20px 20px 0 0;width:100%;max-width:480px;padding:22px 20px 44px;max-height:75vh;overflow-y:auto}
+.excerpt-popup-handle{width:36px;height:4px;border-radius:2px;background:var(--g200);margin:0 auto 18px}
+.excerpt-popup-q{font-size:16px;color:var(--g900);line-height:1.9}
+.excerpt-popup-q::before{content:'\201C';font-size:22px;color:var(--primary);vertical-align:-4px;margin-right:2px}
+.excerpt-popup-q::after{content:'\201D';font-size:22px;color:var(--primary);vertical-align:-4px;margin-left:2px}
+.excerpt-popup-src{font-size:13px;color:var(--g400);margin-top:12px}
+.excerpt-popup-src::before{content:'— '}
+.excerpt-popup-foot{display:flex;align-items:center;gap:8px;margin-top:16px;flex-wrap:wrap}
+.excerpt-popup-actions{display:flex;gap:8px;margin-top:16px}
+.excerpt-popup-btn{flex:1;font-family:'Pretendard',sans-serif;font-size:13px;font-weight:500;padding:10px;border-radius:9px;cursor:pointer;border:1px solid var(--g200);background:#fff;color:var(--g700);transition:background .15s}
+.excerpt-popup-btn:hover{background:var(--g100)}
+.excerpt-popup-btn.primary{background:var(--primary);color:#fff;border-color:var(--primary)}
 
 /* 유형 태그 */
 .type-tag{font-size:10px;font-weight:500;padding:2px 8px;border-radius:20px;white-space:nowrap}
@@ -499,6 +515,20 @@ html,body{background:var(--g50);font-family:'Pretendard',-apple-system,sans-seri
 </div><!-- /main -->
 </div><!-- /app -->
 
+<!-- 발췌 전문 팝업 -->
+<div class="excerpt-popup-overlay" id="excerptPopup" onclick="excerptPopupClick(event)">
+  <div class="excerpt-popup">
+    <div class="excerpt-popup-handle"></div>
+    <div class="excerpt-popup-q" id="popupQ"></div>
+    <div class="excerpt-popup-src" id="popupSrc" style="display:none"></div>
+    <div class="excerpt-popup-foot" id="popupFoot"></div>
+    <div class="excerpt-popup-actions">
+      <button class="excerpt-popup-btn" onclick="closeExcerptPopup()">닫기</button>
+      <button class="excerpt-popup-btn primary" id="popupShare">공유하기</button>
+    </div>
+  </div>
+</div>
+
 <!-- 설정 오버레이 -->
 <div class="overlay" id="settingsOverlay" onclick="overlayClick(event)">
   <div class="settings-sheet">
@@ -797,6 +827,18 @@ function addExcerpt(){
   toast('저장됐어요!');
 }
 
+function openExcerptPopup(id){
+  const e=excerpts.find(x=>x.id===id); if(!e)return;
+  document.getElementById('popupQ').textContent=e.text;
+  const srcEl=document.getElementById('popupSrc');
+  srcEl.textContent=e.src||''; srcEl.style.display=e.src?'block':'none';
+  document.getElementById('popupFoot').innerHTML=typeTag(e.type);
+  document.getElementById('popupShare').onclick=()=>shareExcerpt(id);
+  document.getElementById('excerptPopup').classList.add('open');
+}
+function closeExcerptPopup(){ document.getElementById('excerptPopup').classList.remove('open'); }
+function excerptPopupClick(ev){ if(ev.target===document.getElementById('excerptPopup'))closeExcerptPopup(); }
+
 function delExcerpt(id){ excerpts=excerpts.filter(e=>e.id!==id); save(); renderExcerpts(); renderRemindHero(); }
 
 function typeTag(type){
@@ -840,8 +882,8 @@ function renderExcerpts(){
     const isToday=date===todayStr;
     const dayLabel=`${exMonth+1}월 ${d.getDate()}일 ${DAYS[d.getDay()]}요일`;
     const items=grouped[date].map(e=>`
-      <div class="excerpt-item">
-        <button class="excerpt-del" onclick="delExcerpt(${e.id})">×</button>
+      <div class="excerpt-item" onclick="openExcerptPopup(${e.id})">
+        <button class="excerpt-del" onclick="event.stopPropagation();delExcerpt(${e.id})">×</button>
         <div class="excerpt-q">${e.text}</div>
         <div class="excerpt-foot">
           ${e.src?`<span class="excerpt-src">${e.src}</span>`:''}
@@ -951,34 +993,22 @@ function shelfModalClick(e){ if(e.target===document.getElementById('shelfModal')
 // ── 리마인드 탭 ────────────────────────────────────────
 function renderRemind(){
   const el=document.getElementById('remindList');
-  const todayStr=today();
-  const older=excerpts.filter(e=>e.date<todayStr);
-  if(!older.length){
+  if(!excerpts.length){
     el.innerHTML='<div class="empty"><div class="ei">🔁</div>발췌를 쌓으면 다시 꺼내드려요</div>';
     return;
   }
-  const milestones=[1,3,7,14,30,60,90,180,365];
-  const items=[];
-  milestones.forEach(days=>{
-    const target=new Date(todayStr); target.setDate(target.getDate()-days);
-    const targetStr=`${target.getFullYear()}-${String(target.getMonth()+1).padStart(2,'0')}-${String(target.getDate()).padStart(2,'0')}`;
-    const dayExcerpts=older.filter(e=>e.date===targetStr);
-    if(dayExcerpts.length) items.push({days,excerpts:dayExcerpts});
-  });
-  if(!items.length){
-    const picks=older.slice(0,5);
-    el.innerHTML=picks.map(e=>{
-      const daysAgo=Math.round((new Date(todayStr)-new Date(e.date))/(1000*60*60*24));
-      return remindCardHTML(e,daysAgo);
-    }).join('');
-    return;
-  }
-  el.innerHTML=items.flatMap(item=>item.excerpts.map(e=>remindCardHTML(e,item.days))).join('');
+  const todayStr=today();
+  const shuffled=[...excerpts].sort(()=>Math.random()-.5);
+  el.innerHTML=shuffled.map(e=>{
+    const daysAgo=Math.round((new Date(todayStr)-new Date(e.date))/(1000*60*60*24));
+    const label=daysAgo===0?'오늘':daysAgo===1?'어제':`${daysAgo}일 전`;
+    return remindCardHTML(e,label);
+  }).join('');
 }
 
-function remindCardHTML(e,daysAgo){
+function remindCardHTML(e,label){
   return `<div class="remind-card">
-    <div class="remind-ago">${daysAgo}일 전</div>
+    <div class="remind-ago">${label}</div>
     <div class="excerpt-q">${e.text}</div>
     <div class="excerpt-foot" style="margin-top:8px">
       ${e.src?`<span class="excerpt-src">${e.src}</span>`:''}
