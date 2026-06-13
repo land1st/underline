@@ -855,20 +855,30 @@ function renderExcerpts(){
 // ── 리마인드 히어로 (발췌탭 상단) ─────────────────────
 function renderRemindHero(){
   const el=document.getElementById('remindHero');
-  if(!excerpts.length){el.innerHTML='';return;}
   const todayStr=today();
+
+  if(!excerpts.length){
+    el.innerHTML=`
+      <div class="remind-hero" style="opacity:.7">
+        <div class="remind-hero-eye">✦ 리마인드</div>
+        <div style="font-size:13px;color:rgba(255,255,255,.7);line-height:1.8">발췌를 저장하면<br>이곳에 다시 꺼내드려요</div>
+      </div>`;
+    return;
+  }
+
   const older=excerpts.filter(e=>e.date<todayStr);
-  if(!older.length){el.innerHTML='';return;}
-  const pick=older[Math.floor(Math.random()*Math.min(older.length,10))];
+  const pool=older.length?older:excerpts;
+  const pick=pool[Math.floor(Math.random()*Math.min(pool.length,10))];
   const daysAgo=Math.round((new Date(todayStr)-new Date(pick.date))/(1000*60*60*24));
+  const eyebrow=daysAgo===0?'✦ 오늘의 발췌':`✦ ${daysAgo}일 전 오늘`;
   el.innerHTML=`
     <div class="remind-hero">
-      <div class="remind-hero-eye">✦ ${daysAgo}일 전 오늘</div>
+      <div class="remind-hero-eye">${eyebrow}</div>
       <div class="remind-hero-q">${pick.text}</div>
       ${pick.src?`<div class="remind-hero-src">— ${pick.src}</div>`:''}
       <div class="remind-hero-acts">
         <button class="remind-hero-btn" onclick="renderRemindHero()">다음 문장</button>
-        <button class="remind-hero-btn" onclick="shareExcerpt('${pick.id}')">공유</button>
+        <button class="remind-hero-btn" onclick="shareExcerpt(${pick.id})">공유</button>
       </div>
     </div>`;
 }
