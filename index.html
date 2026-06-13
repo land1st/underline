@@ -11,6 +11,7 @@
 <meta name="apple-mobile-web-app-title" content="underline.">
 <link rel="apple-touch-icon" sizes="180x180" href="icon-180.png">
 <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
@@ -70,13 +71,13 @@ html,body{background:var(--g50);font-family:'Pretendard',-apple-system,sans-seri
 .btn-primary{background:var(--primary);color:#fff;width:100%;margin-top:6px}
 
 /* 리마인드 카드 (발췌탭 상단) */
-.remind-hero{background:var(--primary);border-radius:12px;padding:16px;margin-bottom:12px}
-.remind-hero-eye{font-size:11px;color:#9d97e8;font-weight:500;letter-spacing:.5px;margin-bottom:10px}
-.remind-hero-q{font-size:17px;color:#fff;line-height:1.8;font-weight:400}
+.remind-hero{background:var(--primary);border-radius:12px;padding:18px;margin-bottom:12px;cursor:pointer;height:160px;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden}
+.remind-hero-eye{font-size:11px;color:#9d97e8;font-weight:500;letter-spacing:.5px;margin-bottom:10px;flex-shrink:0}
+.remind-hero-q{font-size:17px;color:#fff;line-height:1.7;font-weight:400;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;flex:1}
 .remind-hero-q::before{content:'\201C';font-size:24px;color:#9d97e8;vertical-align:-5px;margin-right:2px}
 .remind-hero-q::after{content:'\201D';font-size:24px;color:#9d97e8;vertical-align:-5px;margin-left:2px}
-.remind-hero-src{font-size:13px;color:#9d97e8;margin-top:10px}
-.remind-hero-acts{display:flex;justify-content:flex-end;gap:6px;margin-top:14px}
+.remind-hero-src{font-size:13px;color:#9d97e8;margin-top:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:0}
+.remind-hero-acts{display:flex;justify-content:flex-end;gap:6px;margin-top:10px;flex-shrink:0}
 .remind-hero-btn{font-size:12px;padding:6px 14px;border-radius:20px;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.1);color:#fff;cursor:pointer;font-family:'Pretendard',sans-serif;transition:background .15s}
 .remind-hero-btn:hover{background:rgba(255,255,255,.2)}
 
@@ -128,9 +129,9 @@ html,body{background:var(--g50);font-family:'Pretendard',-apple-system,sans-seri
 .shelf-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .shelf-card{background:#fff;border-radius:10px;border:1px solid var(--g200);padding:12px;cursor:pointer;transition:border-color .15s}
 .shelf-card:hover{border-color:var(--primary-mid)}
-.shelf-type{font-size:10px;color:var(--g400);margin-bottom:5px}
-.shelf-name{font-size:13px;font-weight:500;color:var(--g900);line-height:1.4;margin-bottom:3px}
-.shelf-sub{font-size:11px;color:var(--g400)}
+.shelf-type{font-size:11px;color:var(--g400);margin-bottom:5px}
+.shelf-name{font-size:15px;font-weight:500;color:var(--g900);line-height:1.4;margin-bottom:3px}
+.shelf-sub{font-size:12px;color:var(--g400)}
 .shelf-bar{height:2px;border-radius:2px;background:var(--g100);margin-top:10px}
 .shelf-fill{height:100%;border-radius:2px;background:var(--primary)}
 .shelf-empty{border:1px dashed var(--g200);background:var(--g50);display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:88px;border-radius:10px;color:var(--g400);font-size:12px;gap:4px}
@@ -411,8 +412,8 @@ html,body{background:var(--g50);font-family:'Pretendard',-apple-system,sans-seri
           <option value="book">📖 책</option>
           <option value="article">📰 아티클</option>
           <option value="lecture">🎓 강의</option>
-          <option value="podcast">🎧 팟캐스트</option>
           <option value="music">🎵 음악</option>
+          <option value="podcast">🎧 팟캐스트</option>
           <option value="video">▶ 영상</option>
           <option value="etc">✏️ 기타</option>
         </select>
@@ -615,13 +616,13 @@ let opts = JSON.parse(localStorage.getItem('ul-opts')||'{"log":false,"stats":fal
 let dc = null;
 
 const TYPE_META = {
-  book:    {label:'📖 책',    cls:'tt-book'},
-  article: {label:'📰 아티클', cls:'tt-article'},
-  lecture: {label:'🎓 강의',  cls:'tt-lecture'},
+  book:    {label:'📖 책',     cls:'tt-book'},
+  article: {label:'📰 아티클',  cls:'tt-article'},
+  lecture: {label:'🎓 강의',   cls:'tt-lecture'},
+  music:   {label:'🎵 음악',   cls:'tt-music'},
   podcast: {label:'🎧 팟캐스트',cls:'tt-podcast'},
-  music:   {label:'🎵 음악',  cls:'tt-music'},
-  video:   {label:'▶ 영상',   cls:'tt-video'},
-  etc:     {label:'✏️ 기타',  cls:'tt-etc'},
+  video:   {label:'▶ 영상',    cls:'tt-video'},
+  etc:     {label:'✏️ 기타',   cls:'tt-etc'},
 };
 
 const THEMES = [
@@ -881,6 +882,7 @@ function renderExcerpts(){
     const d=new Date(date+'T00:00:00');
     const isToday=date===todayStr;
     const dayLabel=`${exMonth+1}월 ${d.getDate()}일 ${DAYS[d.getDay()]}요일`;
+    const safeKey=date.replace(/-/g,'');
     const items=grouped[date].map(e=>`
       <div class="excerpt-item" onclick="openExcerptPopup(${e.id})">
         <button class="excerpt-del" onclick="event.stopPropagation();delExcerpt(${e.id})">×</button>
@@ -890,8 +892,27 @@ function renderExcerpts(){
           ${typeTag(e.type)}
         </div>
       </div>`).join('');
-    return `<div class="group-hd">${dayLabel}${isToday?' · 오늘':''} · ${grouped[date].length}개</div>${items}`;
+    return `
+      <div class="card" style="padding:0;overflow:hidden;margin-bottom:8px">
+        <div onclick="toggleExDay('${safeKey}')" style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;cursor:pointer;user-select:none">
+          <div style="display:flex;align-items:center;gap:8px">
+            <span id="exa-${safeKey}" style="font-size:14px;color:var(--g400);line-height:1">${isToday?'⌄':'›'}</span>
+            <span style="font-size:13px;font-weight:600;color:${isToday?'var(--primary)':'var(--g900)'}">${dayLabel}${isToday?' <span style="font-size:10px;background:var(--primary);color:#fff;padding:1px 6px;border-radius:10px;margin-left:4px">오늘</span>':''}</span>
+          </div>
+          <span style="font-size:12px;color:var(--g400);font-weight:500">${grouped[date].length}개</span>
+        </div>
+        <div id="exb-${safeKey}" style="display:${isToday?'block':'none'};padding:0 14px 12px;border-top:1px solid var(--g100)">
+          ${items}
+        </div>
+      </div>`;
   }).join('');
+}
+
+function toggleExDay(k){
+  const b=document.getElementById('exb-'+k), a=document.getElementById('exa-'+k);
+  const open=b.style.display!=='none';
+  b.style.display=open?'none':'block';
+  a.textContent=open?'›':'⌄';
 }
 
 // ── 리마인드 히어로 (발췌탭 상단) ─────────────────────
@@ -914,13 +935,15 @@ function renderRemindHero(){
   const daysAgo=Math.round((new Date(todayStr)-new Date(pick.date))/(1000*60*60*24));
   const eyebrow=daysAgo===0?'✦ 오늘의 발췌':`✦ ${daysAgo}일 전 오늘`;
   el.innerHTML=`
-    <div class="remind-hero">
-      <div class="remind-hero-eye">${eyebrow}</div>
-      <div class="remind-hero-q">${pick.text}</div>
-      ${pick.src?`<div class="remind-hero-src">— ${pick.src}</div>`:''}
+    <div class="remind-hero" onclick="openExcerptPopup(${pick.id})">
+      <div>
+        <div class="remind-hero-eye">${eyebrow}</div>
+        <div class="remind-hero-q">${pick.text}</div>
+        ${pick.src?`<div class="remind-hero-src">— ${pick.src}</div>`:''}
+      </div>
       <div class="remind-hero-acts">
-        <button class="remind-hero-btn" onclick="renderRemindHero()">다음 문장</button>
-        <button class="remind-hero-btn" onclick="shareExcerpt(${pick.id})">공유</button>
+        <button class="remind-hero-btn" onclick="event.stopPropagation();renderRemindHero()">다음 문장</button>
+        <button class="remind-hero-btn" onclick="event.stopPropagation();shareExcerpt(${pick.id})">공유</button>
       </div>
     </div>`;
 }
