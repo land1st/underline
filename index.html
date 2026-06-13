@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>underline. — 밑줄이 쌓여 나를 만든다</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#534ab7">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="underline.">
+<link rel="apple-touch-icon" sizes="180x180" href="icon-180.png">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --primary:#534ab7;--primary-light:#eeedfe;--primary-mid:#7f77dd;--primary-dark:#3c3489;
+  --t100:#e1f5ee;--t400:#1d9e75;--t600:#0f6e56;
+  --g50:#f8f7f4;--g100:#f1efe8;--g200:#d3d1c7;--g400:#888780;--g700:#444441;--g900:#1a1916;
+}
+html,body{background:var(--g50);font-family:'Pretendard',-apple-system,sans-serif;color:var(--g900);font-size:15px;line-height:1.5}
+.app{max-width:480px;margin:0 auto;background:var(--g50);min-height:100vh}
+
+/* 헤더 */
+.hd{padding:14px 16px 8px;display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:8px}
+.logo-icon{width:28px;height:28px;background:var(--primary);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo-text{font-size:17px;font-weight:700;letter-spacing:-.3px;color:var(--g900)}
+.hd-right{display:flex;align-items:center;gap:8px}
+.today-pill{background:var(--primary-light);color:var(--primary-dark);font-size:12px;font-weight:500;padding:4px 10px;border-radius:20px}
+.settings-btn{width:32px;height:32px;border-radius:50%;background:#fff;border:1px solid var(--g200);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .15s}
+.settings-btn:hover{background:var(--g100)}
+
+/* 드라이브 바 */
+.drive-bar{display:flex;align-items:center;justify-content:space-between;padding:6px 16px;font-size:11px;min-height:34px}
+.drive-user{display:flex;align-items:center;gap:8px;color:var(--g700)}
+.drive-avatar{width:20px;height:20px;border-radius:50%;object-fit:cover}
+.drive-btn{font-family:'Pretendard',sans-serif;font-size:11px;font-weight:500;padding:4px 12px;border-radius:20px;cursor:pointer;border:1px solid var(--g200);background:#fff;color:var(--g700);transition:all .15s}
+.drive-btn:hover{background:var(--g100)}
+.drive-btn.primary{background:var(--primary);color:#fff;border-color:var(--primary)}
+.drive-sync-ico{color:var(--g400)}
+.drive-sync-ico.spinning{animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.drive-status{font-size:10px;color:var(--g400)}
+
+/* 탭 */
+.tabs{display:flex;gap:6px;padding:0 16px 12px}
+.tab{flex:1;padding:8px 4px;font-size:13px;font-weight:500;color:var(--g400);cursor:pointer;text-align:center;border-radius:20px;border:1px solid var(--g200);background:#fff;transition:all .18s}
+.tab.on{color:#fff;background:var(--primary);border-color:var(--primary)}
+
+/* 섹션 */
+.main{padding:0 16px 80px}
+.sec{display:none}.sec.on{display:block}
+
+/* 카드 */
+.card{background:#fff;border-radius:12px;border:1px solid var(--g200);padding:16px;margin-bottom:12px}
+.card-title{font-size:12px;font-weight:500;color:var(--g400);letter-spacing:.4px;margin-bottom:12px}
+
+/* 폼 */
+.fg{display:flex;flex-direction:column;gap:4px}
+.fg label{font-size:12px;color:var(--g400);font-weight:500}
+.fg input,.fg select,.fg textarea{font-family:'Pretendard',sans-serif;font-size:14px;padding:9px 10px;border:1px solid var(--g200);border-radius:8px;background:var(--g50);color:var(--g900);outline:none;transition:border-color .15s;width:100%}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--primary)}
+.fg textarea{resize:none;line-height:1.75}
+.form-row{display:flex;gap:8px;margin-bottom:8px}
+.btn{font-family:'Pretendard',sans-serif;font-size:14px;font-weight:500;padding:10px 16px;border-radius:8px;cursor:pointer;border:none;transition:opacity .15s}
+.btn:hover{opacity:.85}
+.btn-primary{background:var(--primary);color:#fff;width:100%;margin-top:6px}
+
+/* 리마인드 카드 (발췌탭 상단) */
+.remind-hero{background:var(--primary);border-radius:12px;padding:16px;margin-bottom:12px}
+.remind-hero-eye{font-size:10px;color:#9d97e8;font-weight:500;letter-spacing:.5px;margin-bottom:8px}
+.remind-hero-q{font-size:14px;color:#fff;line-height:1.8;font-weight:400}
+.remind-hero-q::before{content:'\201C';font-size:20px;color:#9d97e8;vertical-align:-4px;margin-right:2px}
+.remind-hero-q::after{content:'\201D';font-size:20px;color:#9d97e8;vertical-align:-4px;margin-left:2px}
+.remind-hero-src{font-size:11px;color:#9d97e8;margin-top:8px}
+.remind-hero-acts{display:flex;justify-content:flex-end;gap:6px;margin-top:12px}
+.remind-hero-btn{font-size:11px;padding:5px 12px;border-radius:20px;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.1);color:#fff;cursor:pointer;font-family:'Pretendard',sans-serif;transition:background .15s}
+.remind-hero-btn:hover{background:rgba(255,255,255,.2)}
+
+/* 발췌 아이템 */
+.group-hd{font-size:11px;font-weight:600;color:var(--g400);letter-spacing:.3px;padding:8px 0 6px;border-top:1px solid var(--g100);margin-top:4px}
+.group-hd:first-child{border-top:none;margin-top:0}
+.excerpt-item{background:#fff;border-radius:10px;border:1px solid var(--g200);padding:14px;margin-bottom:8px;position:relative}
+.excerpt-item:hover .excerpt-del{opacity:1}
+.excerpt-q{font-size:14px;color:var(--g900);line-height:1.8}
+.excerpt-q::before{content:'\201C';font-size:19px;color:var(--primary);vertical-align:-3px;margin-right:2px}
+.excerpt-q::after{content:'\201D';font-size:19px;color:var(--primary);vertical-align:-3px;margin-left:2px}
+.excerpt-foot{display:flex;align-items:center;gap:7px;margin-top:9px;flex-wrap:wrap}
+.excerpt-src{font-size:11px;color:var(--g400)}
+.excerpt-src::before{content:'— '}
+.excerpt-del{position:absolute;top:10px;right:10px;background:none;border:none;font-size:14px;color:var(--g200);cursor:pointer;opacity:0;transition:opacity .15s;line-height:1;padding:2px 4px}
+.excerpt-del:hover{color:#e24b4a}
+
+/* 유형 태그 */
+.type-tag{font-size:10px;font-weight:500;padding:2px 8px;border-radius:20px;white-space:nowrap}
+.tt-book{background:#eeedfe;color:#3c3489}
+.tt-article{background:#e6f1fb;color:#0c447c}
+.tt-lecture{background:#e1f5ee;color:#0f6e56}
+.tt-podcast{background:#faeeda;color:#854f0b}
+.tt-music{background:#fbeaf0;color:#72243e}
+.tt-video{background:#faece7;color:#712b13}
+.tt-etc{background:#f1efe8;color:#444441}
+
+/* 책장 */
+.filter-scroll{display:flex;gap:6px;padding:0 0 10px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.filter-scroll::-webkit-scrollbar{display:none}
+.fc{font-size:12px;font-weight:500;padding:5px 12px;border-radius:20px;white-space:nowrap;cursor:pointer;transition:all .15s;border:1px solid var(--g200);background:#fff;color:var(--g400)}
+.fc.on{background:var(--primary);color:#fff;border-color:var(--primary)}
+.shelf-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.shelf-card{background:#fff;border-radius:10px;border:1px solid var(--g200);padding:12px;cursor:pointer;transition:border-color .15s}
+.shelf-card:hover{border-color:var(--primary-mid)}
+.shelf-type{font-size:10px;color:var(--g400);margin-bottom:5px}
+.shelf-name{font-size:13px;font-weight:500;color:var(--g900);line-height:1.4;margin-bottom:3px}
+.shelf-sub{font-size:11px;color:var(--g400)}
+.shelf-bar{height:2px;border-radius:2px;background:var(--g100);margin-top:10px}
+.shelf-fill{height:100%;border-radius:2px;background:var(--primary)}
+.shelf-empty{border:1px dashed var(--g200);background:var(--g50);display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:88px;border-radius:10px;color:var(--g400);font-size:12px;gap:4px}
+
+/* 책장 상세 모달 */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:100;align-items:flex-end;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal-sheet{background:#fff;border-radius:20px 20px 0 0;width:100%;max-width:480px;padding:20px 20px 40px;max-height:80vh;overflow-y:auto}
+.modal-handle{width:36px;height:4px;border-radius:2px;background:var(--g200);margin:0 auto 16px}
+.modal-title{font-size:16px;font-weight:600;margin-bottom:4px}
+.modal-sub{font-size:12px;color:var(--g400);margin-bottom:16px}
+.modal-items{display:flex;flex-direction:column;gap:10px}
+
+/* 리마인드탭 */
+.remind-list{display:flex;flex-direction:column;gap:10px}
+.remind-card{background:#fff;border-radius:12px;border:1px solid var(--g200);padding:16px}
+.remind-ago{font-size:10px;color:var(--primary);font-weight:500;letter-spacing:.3px;margin-bottom:8px}
+.remind-acts{display:flex;gap:6px;margin-top:12px}
+.remind-act{flex:1;font-size:12px;text-align:center;padding:7px;border-radius:8px;border:1px solid var(--g200);color:var(--g400);cursor:pointer;font-family:'Pretendard',sans-serif;transition:all .15s}
+.remind-act:hover{background:var(--g100)}
+.remind-act.primary{background:var(--primary-light);color:var(--primary-dark);border-color:var(--primary-light);font-weight:500}
+.remind-act.primary:hover{opacity:.85}
+
+/* 선택 탭 (기록/통계/스트릭) */
+.opt-tab-wrap{display:none}
+.opt-tab-wrap.visible{display:block}
+
+/* 기록 탭 */
+.log-item{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--g100)}
+.log-item:last-child{border-bottom:none}
+.log-dot{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;background:var(--primary-light)}
+.log-body{flex:1;min-width:0}
+.log-name{font-size:14px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.log-sub{font-size:12px;color:var(--g400);margin-top:2px}
+.log-min{font-size:15px;font-weight:600;color:var(--primary);flex-shrink:0}
+.del{background:none;border:none;color:var(--g200);cursor:pointer;font-size:16px;padding:2px 4px;line-height:1;transition:color .15s}
+.del:hover{color:#e24b4a}
+
+/* 통계 */
+.stat-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:12px}
+.stat-box{border-radius:10px;padding:14px}
+.stat-lbl{font-size:10px;font-weight:500;color:var(--g400);margin-bottom:4px}
+.stat-val{font-size:22px;font-weight:600}
+.stat-unit{font-size:11px;font-weight:400;color:var(--g400)}
+.chart-wrap{position:relative;width:100%}
+
+/* 스트릭 */
+.ring-row-labels{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:4px}
+.ring-row-lbl{font-size:9px;color:var(--g400);text-align:center}
+.ring-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.ring-cell{display:flex;flex-direction:column;align-items:center}
+.ring-wrap{position:relative;width:32px;height:32px}
+.ring-wrap svg{position:absolute;top:0;left:0}
+.ring-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:600;color:var(--g700)}
+.ring-wrap.today-ring{outline:2px solid var(--primary);border-radius:50%;outline-offset:1px}
+.sn .v{font-size:20px;font-weight:600;color:var(--primary)}
+.sn .l{font-size:10px;color:var(--g400)}
+
+/* 설정 시트 */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:200;align-items:flex-end;justify-content:center}
+.overlay.open{display:flex}
+.settings-sheet{background:#fff;border-radius:20px 20px 0 0;width:100%;max-width:480px;padding:20px 20px 40px;max-height:85vh;overflow-y:auto}
+.sheet-handle{width:36px;height:4px;border-radius:2px;background:var(--g200);margin:0 auto 18px}
+.sheet-title{font-size:15px;font-weight:600;margin-bottom:20px}
+.sheet-sec{margin-bottom:24px}
+.sheet-sec-title{font-size:11px;font-weight:500;color:var(--g400);letter-spacing:.4px;margin-bottom:12px}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--g100)}
+.toggle-row:last-child{border-bottom:none}
+.toggle-lbl{font-size:14px;color:var(--g900)}
+.toggle-sub{font-size:11px;color:var(--g400);margin-top:2px}
+.toggle{width:40px;height:24px;border-radius:12px;background:var(--g200);position:relative;cursor:pointer;transition:background .2s;flex-shrink:0}
+.toggle.on{background:var(--primary)}
+.toggle-knob{width:18px;height:18px;border-radius:50%;background:#fff;position:absolute;top:3px;left:3px;transition:left .2s}
+.toggle.on .toggle-knob{left:19px}
+.theme-swatches{display:flex;gap:12px;flex-wrap:wrap}
+.swatch{width:34px;height:34px;border-radius:50%;cursor:pointer;border:3px solid transparent;transition:transform .15s,border-color .15s}
+.swatch.on{border-color:var(--g900);transform:scale(1.12)}
+.data-btns{display:flex;flex-direction:column;gap:8px}
+.data-btn{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:10px;border:1px solid var(--g200);background:var(--g50);cursor:pointer;font-family:'Pretendard',sans-serif;font-size:13px;color:var(--g900);transition:background .15s;width:100%;text-align:left}
+.data-btn:hover{background:var(--g100)}
+.data-btn-icon{color:var(--g400);flex-shrink:0}
+.data-btn-label{font-weight:500;font-size:13px}
+.data-btn-desc{font-size:11px;color:var(--g400);margin-top:1px}
+.data-btn.danger .data-btn-label{color:#e24b4a}
+.data-btn.danger .data-btn-icon{color:#e24b4a}
+
+/* 공통 */
+.empty{padding:48px 16px;text-align:center;color:var(--g400);font-size:13px}
+.empty .ei{font-size:36px;margin-bottom:10px}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--g900);color:#fff;font-size:12px;font-family:'Pretendard',sans-serif;padding:9px 18px;border-radius:8px;opacity:0;transition:opacity .25s;pointer-events:none;z-index:999;white-space:nowrap}
+.toast.show{opacity:1}
+.month-nav{display:flex;align-items:center;justify-content:space-between;margin:0 0 10px}
+.month-nav-btn{background:none;border:none;cursor:pointer;padding:4px 10px;font-size:20px;color:var(--g400);line-height:1}
+.month-nav-label{font-size:13px;font-weight:600;color:var(--g900)}
+</style>
+</head>
+<body>
+
+<!-- 온보딩 -->
+<div id="onboarding" style="display:none;position:fixed;inset:0;z-index:999;background:#534ab7;font-family:'Pretendard',-apple-system,sans-serif;overflow:hidden">
+<style>
+.ob-wrap{height:100%;display:flex;flex-direction:column}
+.ob-slides{flex:1;display:flex;transition:transform .4s cubic-bezier(.4,0,.2,1)}
+.ob-slide{min-width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 32px;text-align:center}
+.ob-icon{margin-bottom:32px}
+.ob-label{font-size:11px;font-weight:500;letter-spacing:2px;color:#9d97e8;margin-bottom:16px}
+.ob-title{font-size:26px;font-weight:700;color:#fff;line-height:1.35;margin-bottom:16px;word-break:keep-all}
+.ob-desc{font-size:15px;color:#c8c4f0;line-height:1.75;word-break:keep-all}
+.ob-features{margin-top:24px;display:flex;flex-direction:column;gap:12px;width:100%;max-width:280px}
+.ob-feat{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.1);border-radius:12px;padding:12px 16px;text-align:left}
+.ob-feat-icon{font-size:20px;flex-shrink:0}
+.ob-feat-text{font-size:13px;color:#e8e6ff;line-height:1.5}
+.ob-feat-text strong{color:#fff;font-weight:600;display:block;margin-bottom:2px}
+.ob-dots{display:flex;gap:8px;justify-content:center;padding:20px 0}
+.ob-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.3);transition:all .3s}
+.ob-dot.on{width:20px;border-radius:3px;background:#fff}
+.ob-bottom{padding:0 32px 48px;display:flex;flex-direction:column;gap:10px}
+.ob-next{font-family:'Pretendard',sans-serif;font-size:15px;font-weight:600;padding:14px;border-radius:12px;border:none;background:#fff;color:#534ab7;cursor:pointer;width:100%}
+.ob-skip{font-family:'Pretendard',sans-serif;font-size:13px;color:rgba(255,255,255,.5);background:none;border:none;cursor:pointer;padding:4px}
+</style>
+<div class="ob-wrap">
+  <div class="ob-slides" id="obSlides">
+    <div class="ob-slide">
+      <div class="ob-icon">
+        <svg width="96" height="96" viewBox="0 0 96 96">
+          <rect width="96" height="96" rx="22" fill="rgba(255,255,255,0.15)"/>
+          <rect x="18" y="26" width="26" height="36" rx="3" fill="#fff" opacity="0.95"/>
+          <rect x="22" y="33" width="18" height="3" rx="1.5" fill="#c8c6e8"/>
+          <rect x="22" y="40" width="18" height="3" rx="1.5" fill="#c8c6e8"/>
+          <rect x="22" y="47" width="14" height="3" rx="1.5" fill="#c8c6e8"/>
+          <rect x="22" y="54" width="16" height="4" rx="2" fill="#534ab7"/>
+          <rect x="50" y="26" width="26" height="36" rx="3" fill="#fff" opacity="0.95"/>
+          <rect x="54" y="33" width="18" height="3" rx="1.5" fill="#c8c6e8"/>
+          <rect x="54" y="40" width="14" height="3" rx="1.5" fill="#c8c6e8"/>
+          <rect x="54" y="47" width="18" height="3" rx="1.5" fill="#c8c6e8"/>
+          <rect x="54" y="54" width="12" height="4" rx="2" fill="#534ab7"/>
+          <rect x="44" y="26" width="4" height="36" fill="#3c3489" opacity="0.4"/>
+          <g transform="translate(66,58) rotate(-40)">
+            <rect x="-3" y="-14" width="6" height="16" rx="2" fill="#fff"/>
+            <polygon points="-3,2 3,2 0,8" fill="#eeedfe"/>
+          </g>
+        </svg>
+      </div>
+      <div class="ob-label">UNDERLINE.</div>
+      <div class="ob-title">밑줄이 쌓여<br>나를 만든다</div>
+      <div class="ob-desc">책에서, 음악에서, 강의에서—<br>마음에 닿은 문장을 모으고<br>다시 꺼내 읽어요</div>
+    </div>
+    <div class="ob-slide">
+      <div class="ob-icon">
+        <svg width="96" height="96" viewBox="0 0 96 96">
+          <rect width="96" height="96" rx="22" fill="rgba(255,255,255,0.15)"/>
+          <rect x="20" y="28" width="56" height="10" rx="3" fill="#fff" opacity="0.9"/>
+          <rect x="20" y="44" width="42" height="10" rx="3" fill="#fff" opacity="0.7"/>
+          <rect x="20" y="60" width="50" height="10" rx="3" fill="#fff" opacity="0.5"/>
+          <circle cx="72" cy="68" r="14" fill="rgba(255,255,255,0.2)" stroke="#fff" stroke-width="1.5"/>
+          <path d="M66 68 L71 73 L79 63" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        </svg>
+      </div>
+      <div class="ob-label">FEATURES</div>
+      <div class="ob-title">기록하고<br>다시 만나요</div>
+      <div class="ob-features">
+        <div class="ob-feat">
+          <div class="ob-feat-icon">✍️</div>
+          <div class="ob-feat-text"><strong>발췌</strong>책·음악·아티클에서 건진 문장을 바로 저장해요</div>
+        </div>
+        <div class="ob-feat">
+          <div class="ob-feat-icon">📚</div>
+          <div class="ob-feat-text"><strong>책장</strong>출처별로 모아 내 독서 지도를 확인해요</div>
+        </div>
+        <div class="ob-feat">
+          <div class="ob-feat-icon">🔁</div>
+          <div class="ob-feat-text"><strong>리마인드</strong>며칠 전 문장을 다시 꺼내 읽어요</div>
+        </div>
+      </div>
+    </div>
+    <div class="ob-slide">
+      <div class="ob-icon">
+        <svg width="96" height="96" viewBox="0 0 96 96">
+          <rect width="96" height="96" rx="22" fill="rgba(255,255,255,0.15)"/>
+          <circle cx="48" cy="42" r="20" fill="rgba(255,255,255,0.2)" stroke="#fff" stroke-width="1.5"/>
+          <path d="M36 42 L44 50 L62 34" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          <rect x="22" y="70" width="52" height="3" rx="1.5" fill="rgba(255,255,255,0.3)"/>
+        </svg>
+      </div>
+      <div class="ob-label">GET STARTED</div>
+      <div class="ob-title">오늘 읽다 멈춘<br>문장부터 저장해보세요</div>
+      <div class="ob-desc">Google 로그인으로 어디서든<br>데이터가 자동으로 동기화돼요<br><br>
+        <span style="font-size:13px;color:rgba(255,255,255,0.4)">로그인 없이도 로컬 저장으로 사용 가능해요</span>
+      </div>
+    </div>
+  </div>
+  <div class="ob-dots" id="obDots">
+    <div class="ob-dot on"></div>
+    <div class="ob-dot"></div>
+    <div class="ob-dot"></div>
+  </div>
+  <div class="ob-bottom">
+    <button class="ob-next" id="obNextBtn" onclick="obNext()">다음</button>
+    <button class="ob-skip" id="obSkipBtn" onclick="obSkip()">건너뛰기</button>
+  </div>
+</div>
+</div>
+
+<div class="app">
+
+<!-- 헤더 -->
+<div class="hd">
+  <div class="logo">
+    <div class="logo-icon">
+      <svg width="18" height="18" viewBox="0 0 512 512">
+        <rect x="60" y="100" width="150" height="200" rx="8" fill="#fff" opacity="0.95"/>
+        <rect x="80" y="140" width="110" height="10" rx="5" fill="#c8c6e8"/>
+        <rect x="80" y="165" width="110" height="10" rx="5" fill="#c8c6e8"/>
+        <rect x="80" y="190" width="80" height="10" rx="5" fill="#c8c6e8"/>
+        <rect x="80" y="218" width="100" height="14" rx="6" fill="#534ab7"/>
+        <rect x="220" y="100" width="150" height="200" rx="8" fill="#fff" opacity="0.95"/>
+        <rect x="240" y="140" width="110" height="10" rx="5" fill="#c8c6e8"/>
+        <rect x="240" y="165" width="88" height="10" rx="5" fill="#c8c6e8"/>
+        <rect x="240" y="190" width="100" height="10" rx="5" fill="#c8c6e8"/>
+        <rect x="240" y="218" width="84" height="14" rx="6" fill="#534ab7"/>
+        <rect x="205" y="100" width="20" height="200" rx="2" fill="#3c3489" opacity="0.5"/>
+        <g transform="translate(330,282) rotate(-40)">
+          <rect x="-10" y="-62" width="20" height="65" rx="6" fill="#fff"/>
+          <polygon points="-10,3 10,3 0,22" fill="#eeedfe"/>
+          <rect x="-10" y="-62" width="20" height="14" rx="5" fill="#eeedfe" opacity="0.7"/>
+        </g>
+      </svg>
+    </div>
+    <div class="logo-text">underline.</div>
+  </div>
+  <div class="hd-right">
+    <div class="today-pill" id="todayPill"></div>
+    <div class="settings-btn" onclick="openSettings()" title="설정">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="3"/>
+        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+      </svg>
+    </div>
+  </div>
+</div>
+
+<!-- 드라이브 바 -->
+<div class="drive-bar" id="driveBar">
+  <div class="drive-user">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--g200)"><path d="M22 12V6l-8-4-8 4v6c0 5 8 8 8 8s8-3 8-8z"/></svg>
+    <span style="color:var(--g400)">로그인하면 Drive에 자동 저장돼요</span>
+  </div>
+  <button class="drive-btn primary" onclick="driveLogin()">Google 로그인</button>
+</div>
+
+<!-- 탭 -->
+<div class="tabs" id="tabBar">
+  <div class="tab on" id="tab-excerpt" onclick="sw('excerpt',this)">발췌</div>
+  <div class="tab" id="tab-shelf" onclick="sw('shelf',this)">책장</div>
+  <div class="tab" id="tab-remind" onclick="sw('remind',this)">리마인드</div>
+  <div class="tab opt-tab-wrap" id="tab-log" onclick="sw('log',this)">기록</div>
+  <div class="tab opt-tab-wrap" id="tab-stats" onclick="sw('stats',this)">통계</div>
+  <div class="tab opt-tab-wrap" id="tab-streak" onclick="sw('streak',this)">스트릭</div>
+</div>
+
+<div class="main">
+
+<!-- 발췌 탭 -->
+<div class="sec on" id="sec-excerpt">
+  <div id="remindHero"></div>
+  <div class="card">
+    <div class="card-title">발췌 추가</div>
+    <div class="fg" style="margin-bottom:8px">
+      <textarea id="ex-text" rows="3" placeholder="마음에 남은 문장을 입력하세요"></textarea>
+    </div>
+    <div class="form-row">
+      <div class="fg" style="flex:1">
+        <input id="ex-src" placeholder="출처 (책 제목, 곡명, 채널명 등)" list="srcSuggestions"/>
+        <datalist id="srcSuggestions"></datalist>
+      </div>
+      <div class="fg" style="flex:0 0 110px">
+        <select id="ex-type">
+          <option value="book">📖 책</option>
+          <option value="article">📰 아티클</option>
+          <option value="lecture">🎓 강의</option>
+          <option value="podcast">🎧 팟캐스트</option>
+          <option value="music">🎵 음악</option>
+          <option value="video">▶ 영상</option>
+          <option value="etc">✏️ 기타</option>
+        </select>
+      </div>
+    </div>
+    <button class="btn btn-primary" onclick="addExcerpt()">+ 저장</button>
+  </div>
+  <div id="excerptViewNav" style="display:none">
+    <div class="month-nav">
+      <button class="month-nav-btn" onclick="changeExMonth(-1)">‹</button>
+      <div class="month-nav-label" id="exMonthLabel"></div>
+      <button class="month-nav-btn" onclick="changeExMonth(1)" id="exMonthNext">›</button>
+    </div>
+  </div>
+  <div id="excerptList"></div>
+</div>
+
+<!-- 책장 탭 -->
+<div class="sec" id="sec-shelf">
+  <div class="filter-scroll" id="shelfFilter"></div>
+  <div class="shelf-grid" id="shelfGrid"></div>
+</div>
+
+<!-- 책장 상세 모달 -->
+<div class="modal-overlay" id="shelfModal" onclick="shelfModalClick(event)">
+  <div class="modal-sheet">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="shelfModalTitle"></div>
+    <div class="modal-sub" id="shelfModalSub"></div>
+    <div class="modal-items" id="shelfModalItems"></div>
+  </div>
+</div>
+
+<!-- 리마인드 탭 -->
+<div class="sec" id="sec-remind">
+  <div style="font-size:12px;color:var(--g400);margin-bottom:12px">저장한 문장을 다시 꺼내 읽어요</div>
+  <div id="remindList"></div>
+</div>
+
+<!-- 기록 탭 (선택) -->
+<div class="sec opt-tab-wrap" id="sec-log">
+  <div class="card">
+    <div class="card-title">오늘의 학습 추가</div>
+    <div class="form-row">
+      <div class="fg" style="flex:0 0 auto;min-width:90px">
+        <label>카테고리</label>
+        <select id="log-cat">
+          <option value="study">✏️ 공부</option>
+          <option value="book">📚 독서</option>
+          <option value="lang">🗣 언어</option>
+          <option value="etc">📌 기타</option>
+        </select>
+      </div>
+      <div class="fg"><label>내용</label><input id="ltitle" placeholder="예) 영단어 50개"/></div>
+    </div>
+    <div class="form-row">
+      <div class="fg" style="flex:0 0 70px"><label>시간(분)</label><input id="lmin" type="number" min="1" max="600" placeholder="30"/></div>
+      <div class="fg"><label>메모 (선택)</label><input id="lmemo" placeholder="오늘의 한마디"/></div>
+    </div>
+    <button class="btn btn-primary" onclick="addLog()">+ 추가</button>
+  </div>
+  <div class="month-nav">
+    <button class="month-nav-btn" onclick="changeLogMonth(-1)">‹</button>
+    <div class="month-nav-label" id="logMonthLabel"></div>
+    <button class="month-nav-btn" onclick="changeLogMonth(1)" id="logMonthNext">›</button>
+  </div>
+  <div id="logList"></div>
+</div>
+
+<!-- 통계 탭 (선택) -->
+<div class="sec opt-tab-wrap" id="sec-stats">
+  <div class="month-nav">
+    <button class="month-nav-btn" onclick="changeStatsMonth(-1)">‹</button>
+    <div class="month-nav-label" id="statsMonthLabel"></div>
+    <button class="month-nav-btn" onclick="changeStatsMonth(1)" id="statsMonthNext">›</button>
+  </div>
+  <div class="stat-grid" id="statGrid"></div>
+  <div class="card">
+    <div class="card-title" id="weekChartTitle">이번 주</div>
+    <div class="chart-wrap" style="height:180px"><canvas id="dailyC"></canvas></div>
+  </div>
+</div>
+
+<!-- 스트릭 탭 (선택) -->
+<div class="sec opt-tab-wrap" id="sec-streak">
+  <div class="card">
+    <div class="month-nav">
+      <button class="month-nav-btn" onclick="changeStreakMonth(-1)">‹</button>
+      <div class="month-nav-label" id="streakMonthLabel"></div>
+      <button class="month-nav-btn" onclick="changeStreakMonth(1)" id="streakNext">›</button>
+    </div>
+    <div style="display:flex;justify-content:flex-end;gap:16px;margin-bottom:14px">
+      <div class="sn"><div class="v" id="curS">0</div><div class="l">연속</div></div>
+      <div class="sn"><div class="v" id="totD">0</div><div class="l">총 학습일</div></div>
+    </div>
+    <div id="ringCal"></div>
+  </div>
+</div>
+
+</div><!-- /main -->
+</div><!-- /app -->
+
+<!-- 설정 오버레이 -->
+<div class="overlay" id="settingsOverlay" onclick="overlayClick(event)">
+  <div class="settings-sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">설정</div>
+
+    <div class="sheet-sec">
+      <div class="sheet-sec-title">Google Drive 동기화</div>
+      <div id="settingsDriveSection"></div>
+    </div>
+
+    <div class="sheet-sec">
+      <div class="sheet-sec-title">선택 기능</div>
+      <div style="font-size:12px;color:var(--g400);margin-bottom:12px;line-height:1.6">아래 기능을 켜면 탭에 추가돼요</div>
+      <div class="toggle-row">
+        <div>
+          <div class="toggle-lbl">공부 시간 기록</div>
+          <div class="toggle-sub">탭에 '기록' 추가</div>
+        </div>
+        <div class="toggle" id="tog-log" onclick="toggleOpt('log')"><div class="toggle-knob"></div></div>
+      </div>
+      <div class="toggle-row">
+        <div>
+          <div class="toggle-lbl">통계</div>
+          <div class="toggle-sub">탭에 '통계' 추가</div>
+        </div>
+        <div class="toggle" id="tog-stats" onclick="toggleOpt('stats')"><div class="toggle-knob"></div></div>
+      </div>
+      <div class="toggle-row">
+        <div>
+          <div class="toggle-lbl">스트릭 캘린더</div>
+          <div class="toggle-sub">탭에 '스트릭' 추가</div>
+        </div>
+        <div class="toggle" id="tog-streak" onclick="toggleOpt('streak')"><div class="toggle-knob"></div></div>
+      </div>
+    </div>
+
+    <div class="sheet-sec">
+      <div class="sheet-sec-title">테마 색상</div>
+      <div class="theme-swatches" id="themeSwatches"></div>
+    </div>
+
+    <div class="sheet-sec">
+      <div class="sheet-sec-title">데이터 관리</div>
+      <div class="data-btns">
+        <button class="data-btn" onclick="shareApp()">
+          <svg class="data-btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+          <div><div class="data-btn-label">앱 공유하기</div><div class="data-btn-desc">underline. 링크를 친구에게 공유해요</div></div>
+        </button>
+        <button class="data-btn" onclick="exportJSON()">
+          <svg class="data-btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <div><div class="data-btn-label">JSON으로 내보내기</div><div class="data-btn-desc">다른 기기에서 불러올 수 있어요</div></div>
+        </button>
+        <button class="data-btn" onclick="document.getElementById('importFile').click()">
+          <svg class="data-btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          <div><div class="data-btn-label">JSON 가져오기</div><div class="data-btn-desc">내보낸 파일을 불러와요 (기존 데이터에 병합)</div></div>
+        </button>
+        <input type="file" id="importFile" accept=".json" style="display:none" onchange="importJSON(event)">
+        <button class="data-btn danger" onclick="confirmReset()">
+          <svg class="data-btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
+          <div><div class="data-btn-label">데이터 초기화</div><div class="data-btn-desc">모든 발췌 기록이 삭제돼요</div></div>
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div style="text-align:center;padding:24px 16px 36px;border-top:1px solid var(--g100);margin-top:8px">
+  <div style="font-size:13px;font-weight:700;color:var(--g700);letter-spacing:.5px;margin-bottom:6px">underline.</div>
+  <div style="font-size:11px;color:var(--g400);margin-bottom:4px">밑줄이 쌓여 나를 만든다</div>
+  <div style="font-size:11px;color:var(--g200);margin-bottom:3px">© 2026 <strong style="color:var(--g400)">land1st</strong> · All rights reserved</div>
+  <div style="font-size:10px;color:var(--g200)">Powered by <strong style="color:var(--g400)">Claude AI</strong></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script>
+// ── 데이터 ─────────────────────────────────────────────
+let excerpts = JSON.parse(localStorage.getItem('ul-excerpts')||'[]');
+let logs = JSON.parse(localStorage.getItem('ul-logs')||'[]');
+let opts = JSON.parse(localStorage.getItem('ul-opts')||'{"log":false,"stats":false,"streak":false}');
+let dc = null;
+
+const TYPE_META = {
+  book:    {label:'📖 책',    cls:'tt-book'},
+  article: {label:'📰 아티클', cls:'tt-article'},
+  lecture: {label:'🎓 강의',  cls:'tt-lecture'},
+  podcast: {label:'🎧 팟캐스트',cls:'tt-podcast'},
+  music:   {label:'🎵 음악',  cls:'tt-music'},
+  video:   {label:'▶ 영상',   cls:'tt-video'},
+  etc:     {label:'✏️ 기타',  cls:'tt-etc'},
+};
+
+const THEMES = [
+  {name:'퍼플', primary:'#534ab7', light:'#eeedfe', mid:'#7f77dd', dark:'#3c3489'},
+  {name:'올리브', primary:'#6b7040', light:'#f0f0e4', mid:'#8f9558', dark:'#4a4d2a'},
+  {name:'코럴', primary:'#993c1d', light:'#faece7', mid:'#d85a30', dark:'#712b13'},
+  {name:'브라운', primary:'#9a7a5f', light:'#f7f0ea', mid:'#b89880', dark:'#6e5240'},
+  {name:'블루', primary:'#185fa5', light:'#e6f1fb', mid:'#378add', dark:'#0c447c'},
+  {name:'다크', primary:'#2c2c2a', light:'#f1efe8', mid:'#5f5e5a', dark:'#1a1916'},
+];
+
+const today = () => { const d=new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; };
+const save = () => { localStorage.setItem('ul-excerpts',JSON.stringify(excerpts)); localStorage.setItem('ul-logs',JSON.stringify(logs)); if(driveToken)driveSave(); };
+const saveOpts = () => localStorage.setItem('ul-opts',JSON.stringify(opts));
+const toast = msg => { const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2200); };
+
+// ── 온보딩 ─────────────────────────────────────────────
+let obIdx=0;
+function obInit(){ if(!localStorage.getItem('ul-onboarded')) document.getElementById('onboarding').style.display='block'; }
+function obNext(){
+  obIdx++;
+  if(obIdx>=3){obFinish();return;}
+  document.getElementById('obSlides').style.transform=`translateX(-${obIdx*100}%)`;
+  document.querySelectorAll('.ob-dot').forEach((d,i)=>d.classList.toggle('on',i===obIdx));
+  document.getElementById('obNextBtn').textContent=obIdx===2?'시작하기':'다음';
+  document.getElementById('obSkipBtn').style.display=obIdx===2?'none':'block';
+}
+function obSkip(){obFinish();}
+function obFinish(){
+  localStorage.setItem('ul-onboarded','1');
+  const ob=document.getElementById('onboarding');
+  ob.style.transition='opacity .4s'; ob.style.opacity='0';
+  setTimeout(()=>ob.style.display='none',400);
+}
+obInit();
+
+// ── 테마 ───────────────────────────────────────────────
+function applyTheme(t){
+  const r=document.documentElement.style;
+  r.setProperty('--primary',t.primary); r.setProperty('--primary-light',t.light);
+  r.setProperty('--primary-mid',t.mid); r.setProperty('--primary-dark',t.dark);
+  localStorage.setItem('ul-theme',t.name);
+}
+function initTheme(){ const s=localStorage.getItem('ul-theme'); applyTheme(THEMES.find(t=>t.name===s)||THEMES[0]); }
+function renderSwatches(){
+  const s=localStorage.getItem('ul-theme')||'퍼플';
+  document.getElementById('themeSwatches').innerHTML=THEMES.map(t=>`<div class="swatch${t.name===s?' on':''}" title="${t.name}" style="background:${t.primary}" onclick="pickTheme('${t.name}')"></div>`).join('');
+}
+function pickTheme(name){ applyTheme(THEMES.find(t=>t.name===name)); renderSwatches(); toast(`${name} 테마로 변경됐어요`); }
+initTheme();
+
+// ── 날짜 표시 ──────────────────────────────────────────
+const DAYS=['일','월','화','수','목','금','토'];
+const td2=new Date();
+document.getElementById('todayPill').textContent=`${td2.getMonth()+1}월 ${td2.getDate()}일 ${DAYS[td2.getDay()]}요일`;
+
+// ── 선택 탭 토글 ───────────────────────────────────────
+function applyOpts(){
+  ['log','stats','streak'].forEach(k=>{
+    const on=opts[k];
+    document.querySelectorAll(`.opt-tab-wrap`).forEach(el=>{
+      if(el.id===`tab-${k}`||el.id===`sec-${k}`) el.classList.toggle('visible',on);
+    });
+    const tog=document.getElementById(`tog-${k}`);
+    if(tog) tog.classList.toggle('on',on);
+  });
+}
+function toggleOpt(k){
+  opts[k]=!opts[k]; saveOpts(); applyOpts();
+  toast(opts[k]?`'${k==='log'?'기록':k==='stats'?'통계':'스트릭'}' 탭이 추가됐어요`:`탭에서 제거됐어요`);
+}
+
+// ── 탭 전환 ────────────────────────────────────────────
+function sw(name,el){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on')); el.classList.add('on');
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));
+  document.getElementById('sec-'+name).classList.add('on');
+  if(name==='shelf') renderShelf();
+  if(name==='remind') renderRemind();
+  if(name==='stats'){ statsYear=new Date().getFullYear(); statsMonth=new Date().getMonth(); renderStats(); }
+  if(name==='streak'){ streakYear=new Date().getFullYear(); streakMonth=new Date().getMonth(); renderStreak(); }
+}
+
+// ── Google Drive ───────────────────────────────────────
+const CLIENT_ID='150311410542-ds3rjmalk45fdmf68bdaqmgbaiajo6qo.apps.googleusercontent.com';
+const SCOPES='https://www.googleapis.com/auth/drive.appdata';
+const FILE_NAME='underline-data.json';
+let driveToken=null, driveFileId=null, driveUser=null, driveSaving=false;
+
+function driveLogin(silent=false){
+  const client=google.accounts.oauth2.initTokenClient({
+    client_id:CLIENT_ID, scope:SCOPES, prompt:silent?'none':'',
+    callback:async(resp)=>{
+      if(resp.error){if(!silent)toast('로그인 실패: '+resp.error);return;}
+      driveToken=resp.access_token;
+      localStorage.setItem('ul-drive-hint','1');
+      await fetchDriveProfile(); await driveLoad(); updateDriveUI();
+      if(!silent)toast('Google Drive 연결됐어요!');
+    }
+  });
+  client.requestAccessToken();
+}
+window.addEventListener('load',()=>{ if(localStorage.getItem('ul-drive-hint')) setTimeout(()=>{try{driveLogin(true);}catch(e){}},1500); });
+
+async function fetchDriveProfile(){
+  try{ const r=await fetch('https://www.googleapis.com/oauth2/v3/userinfo',{headers:{Authorization:'Bearer '+driveToken}}); driveUser=await r.json(); }catch(e){}
+}
+
+async function driveLoad(){
+  try{
+    setSyncIcon(true);
+    const r=await fetch(`https://www.googleapis.com/drive/v3/files?spaces=appDataFolder&q=name='${FILE_NAME}'&fields=files(id,name)`,{headers:{Authorization:'Bearer '+driveToken}});
+    const data=await r.json();
+    if(data.files&&data.files.length>0){
+      driveFileId=data.files[0].id;
+      const fr=await fetch(`https://www.googleapis.com/drive/v3/files/${driveFileId}?alt=media`,{headers:{Authorization:'Bearer '+driveToken}});
+      const saved=await fr.json();
+      if(saved.excerpts){
+        const existIds=new Set(excerpts.map(e=>e.id));
+        const newEx=saved.excerpts.filter(e=>!existIds.has(e.id));
+        excerpts=[...newEx,...excerpts].sort((a,b)=>b.id-a.id);
+      }
+      if(saved.logs){
+        const existIds=new Set(logs.map(l=>l.id));
+        const newLogs=saved.logs.filter(l=>!existIds.has(l.id));
+        logs=[...newLogs,...logs].sort((a,b)=>b.id-a.id);
+      }
+      localStorage.setItem('ul-excerpts',JSON.stringify(excerpts));
+      localStorage.setItem('ul-logs',JSON.stringify(logs));
+      renderExcerpts(); renderRemindHero();
+    }
+    setSyncIcon(false);
+  }catch(e){setSyncIcon(false);toast('Drive 불러오기 실패');}
+}
+
+async function driveSave(){
+  if(!driveToken||driveSaving)return;
+  driveSaving=true; setSyncIcon(true);
+  try{
+    const body=JSON.stringify({excerpts,logs,savedAt:new Date().toISOString(),version:1});
+    if(driveFileId){
+      await fetch(`https://www.googleapis.com/upload/drive/v3/files/${driveFileId}?uploadType=media`,{method:'PATCH',headers:{Authorization:'Bearer '+driveToken,'Content-Type':'application/json'},body});
+    }else{
+      const meta={name:FILE_NAME,parents:['appDataFolder']};
+      const form=new FormData();
+      form.append('metadata',new Blob([JSON.stringify(meta)],{type:'application/json'}));
+      form.append('file',new Blob([body],{type:'application/json'}));
+      const r=await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id',{method:'POST',headers:{Authorization:'Bearer '+driveToken},body:form});
+      const d=await r.json(); driveFileId=d.id;
+    }
+    updateDriveSyncTime();
+  }catch(e){toast('Drive 저장 실패');}
+  driveSaving=false; setSyncIcon(false);
+}
+
+function driveLogout(){ driveToken=null;driveFileId=null;driveUser=null;localStorage.removeItem('ul-drive-hint');updateDriveUI();toast('로그아웃됐어요'); }
+function setSyncIcon(s){ const ico=document.getElementById('driveSyncIco');if(ico)ico.classList.toggle('spinning',s); }
+function updateDriveSyncTime(){ const el=document.getElementById('driveSyncTime');if(el){const n=new Date();el.textContent=`${n.getHours()}:${String(n.getMinutes()).padStart(2,'0')} 동기화`;} }
+
+function updateDriveUI(){
+  const bar=document.getElementById('driveBar');
+  const sec=document.getElementById('settingsDriveSection');
+  if(driveToken&&driveUser){
+    bar.innerHTML=`<div class="drive-user">${driveUser.picture?`<img class="drive-avatar" src="${driveUser.picture}" referrerpolicy="no-referrer">`:''}
+      <span>${driveUser.name||driveUser.email||''}</span>
+      <svg id="driveSyncIco" class="drive-sync-ico" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+      <span class="drive-status" id="driveSyncTime">동기화 준비</span></div>
+      <button class="drive-btn" onclick="driveLogout()">로그아웃</button>`;
+    if(sec)sec.innerHTML=`<div style="display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:10px;background:var(--t100);border:1px solid var(--g200)">
+      ${driveUser.picture?`<img class="drive-avatar" src="${driveUser.picture}" referrerpolicy="no-referrer" style="width:28px;height:28px">`:''}
+      <div><div style="font-size:13px;font-weight:500">${driveUser.name||''}</div><div style="font-size:11px;color:var(--g400)">${driveUser.email||''}</div></div>
+      <button class="drive-btn" style="margin-left:auto" onclick="driveLogout();closeSettings()">로그아웃</button></div>
+      <div style="font-size:11px;color:var(--g400);margin-top:8px;line-height:1.6">저장/수정 시 Drive에 자동 동기화돼요.<br>앱 전용 폴더(appDataFolder)에 저장되며 다른 파일에 접근하지 않아요.</div>`;
+  }else{
+    bar.innerHTML=`<div class="drive-user"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--g200)"><path d="M22 12V6l-8-4-8 4v6c0 5 8 8 8 8s8-3 8-8z"/></svg>
+      <span style="color:var(--g400)">로그인하면 Drive에 자동 저장돼요</span></div>
+      <button class="drive-btn primary" onclick="driveLogin()">Google 로그인</button>`;
+    if(sec)sec.innerHTML=`<button class="data-btn" onclick="driveLogin()">
+      <svg class="data-btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12V6l-8-4-8 4v6c0 5 8 8 8 8s8-3 8-8z"/></svg>
+      <div><div class="data-btn-label">Google로 로그인</div><div class="data-btn-desc">Drive에 자동 저장 · 기기 간 동기화</div></div></button>`;
+  }
+}
+
+// ── 발췌 ───────────────────────────────────────────────
+let exYear=new Date().getFullYear(), exMonth=new Date().getMonth();
+
+function changeExMonth(dir){
+  exMonth+=dir; if(exMonth>11){exMonth=0;exYear++;} if(exMonth<0){exMonth=11;exYear--;}
+  renderExcerpts();
+}
+
+function addExcerpt(){
+  const text=document.getElementById('ex-text').value.trim();
+  const src=document.getElementById('ex-src').value.trim();
+  const type=document.getElementById('ex-type').value;
+  if(!text){toast('문장을 입력해주세요');return;}
+  excerpts.unshift({id:Date.now(),text,src,type,date:today()});
+  save();
+  exYear=new Date().getFullYear(); exMonth=new Date().getMonth();
+  renderExcerpts(); renderRemindHero(); updateSrcSuggestions();
+  document.getElementById('ex-text').value='';
+  document.getElementById('ex-src').value='';
+  toast('저장됐어요!');
+}
+
+function delExcerpt(id){ excerpts=excerpts.filter(e=>e.id!==id); save(); renderExcerpts(); renderRemindHero(); }
+
+function typeTag(type){
+  const m=TYPE_META[type]||TYPE_META.etc;
+  return `<span class="type-tag ${m.cls}">${m.label}</span>`;
+}
+
+function updateSrcSuggestions(){
+  const srcs=[...new Set(excerpts.map(e=>e.src).filter(Boolean))];
+  document.getElementById('srcSuggestions').innerHTML=srcs.map(s=>`<option value="${s}">`).join('');
+}
+
+function renderExcerpts(){
+  const now=new Date();
+  const prefix=`${exYear}-${String(exMonth+1).padStart(2,'0')}`;
+  const monthEx=excerpts.filter(e=>e.date&&e.date.startsWith(prefix));
+  const navEl=document.getElementById('excerptViewNav');
+  const el=document.getElementById('excerptList');
+  const label=document.getElementById('exMonthLabel');
+  const nextBtn=document.getElementById('exMonthNext');
+
+  navEl.style.display=excerpts.length?'block':'none';
+  if(label) label.textContent=`${exYear}년 ${exMonth+1}월`;
+  if(nextBtn){
+    const isCurrent=exYear>now.getFullYear()||(exYear===now.getFullYear()&&exMonth>=now.getMonth());
+    nextBtn.style.color=isCurrent?'var(--g200)':'var(--g400)';
+    nextBtn.disabled=isCurrent;
+  }
+
+  if(!monthEx.length){
+    el.innerHTML=`<div class="empty"><div class="ei">✍️</div>${excerpts.length?'이 달의 발췌가 없어요':'첫 문장을 저장해보세요'}</div>`;
+    return;
+  }
+
+  const grouped={};
+  monthEx.forEach(e=>{if(!grouped[e.date])grouped[e.date]=[];grouped[e.date].push(e);});
+  const todayStr=today();
+
+  el.innerHTML=Object.keys(grouped).sort((a,b)=>b.localeCompare(a)).map(date=>{
+    const d=new Date(date+'T00:00:00');
+    const isToday=date===todayStr;
+    const dayLabel=`${exMonth+1}월 ${d.getDate()}일 ${DAYS[d.getDay()]}요일`;
+    const items=grouped[date].map(e=>`
+      <div class="excerpt-item">
+        <button class="excerpt-del" onclick="delExcerpt(${e.id})">×</button>
+        <div class="excerpt-q">${e.text}</div>
+        <div class="excerpt-foot">
+          ${e.src?`<span class="excerpt-src">${e.src}</span>`:''}
+          ${typeTag(e.type)}
+        </div>
+      </div>`).join('');
+    return `<div class="group-hd">${dayLabel}${isToday?' · 오늘':''} · ${grouped[date].length}개</div>${items}`;
+  }).join('');
+}
+
+// ── 리마인드 히어로 (발췌탭 상단) ─────────────────────
+function renderRemindHero(){
+  const el=document.getElementById('remindHero');
+  if(!excerpts.length){el.innerHTML='';return;}
+  const todayStr=today();
+  const older=excerpts.filter(e=>e.date<todayStr);
+  if(!older.length){el.innerHTML='';return;}
+  const pick=older[Math.floor(Math.random()*Math.min(older.length,10))];
+  const daysAgo=Math.round((new Date(todayStr)-new Date(pick.date))/(1000*60*60*24));
+  el.innerHTML=`
+    <div class="remind-hero">
+      <div class="remind-hero-eye">✦ ${daysAgo}일 전 오늘</div>
+      <div class="remind-hero-q">${pick.text}</div>
+      ${pick.src?`<div class="remind-hero-src">— ${pick.src}</div>`:''}
+      <div class="remind-hero-acts">
+        <button class="remind-hero-btn" onclick="renderRemindHero()">다음 문장</button>
+        <button class="remind-hero-btn" onclick="shareExcerpt('${pick.id}')">공유</button>
+      </div>
+    </div>`;
+}
+
+function shareExcerpt(id){
+  const e=excerpts.find(x=>x.id==id); if(!e)return;
+  const text=`"${e.text}"${e.src?' — '+e.src:''}`;
+  if(navigator.share) navigator.share({text}).catch(()=>{});
+  else navigator.clipboard.writeText(text).then(()=>toast('클립보드에 복사됐어요'));
+}
+
+// ── 책장 ───────────────────────────────────────────────
+let shelfFilter='all';
+
+function renderShelf(){
+  const types=['all',...Object.keys(TYPE_META)];
+  const filterEl=document.getElementById('shelfFilter');
+  filterEl.innerHTML=types.map(t=>{
+    const label=t==='all'?'전체':TYPE_META[t].label;
+    return `<div class="fc${shelfFilter===t?' on':''}" onclick="setShelfFilter('${t}')">${label}</div>`;
+  }).join('');
+
+  const filtered=shelfFilter==='all'?excerpts:excerpts.filter(e=>e.type===shelfFilter);
+  const srcMap={};
+  filtered.forEach(e=>{
+    const key=e.src||'(출처 없음)';
+    if(!srcMap[key])srcMap[key]={src:key,type:e.type,count:0};
+    srcMap[key].count++;
+  });
+  const srcs=Object.values(srcMap).sort((a,b)=>b.count-a.count);
+  const maxCount=srcs[0]?.count||1;
+  const grid=document.getElementById('shelfGrid');
+  if(!srcs.length){
+    grid.innerHTML=`<div class="shelf-empty" style="grid-column:1/-1"><div style="font-size:28px">📚</div><div>발췌를 추가하면 여기에 쌓여요</div></div>`;
+    return;
+  }
+  grid.innerHTML=srcs.map(s=>`
+    <div class="shelf-card" onclick="openShelfModal('${encodeURIComponent(s.src)}')">
+      <div class="shelf-type">${TYPE_META[s.type]?.label||'✏️ 기타'}</div>
+      <div class="shelf-name">${s.src}</div>
+      <div class="shelf-sub">${s.count}문장</div>
+      <div class="shelf-bar"><div class="shelf-fill" style="width:${Math.round(s.count/maxCount*100)}%"></div></div>
+    </div>`).join('');
+}
+
+function setShelfFilter(t){ shelfFilter=t; renderShelf(); }
+
+function openShelfModal(srcEncoded){
+  const src=decodeURIComponent(srcEncoded);
+  const items=excerpts.filter(e=>(e.src||'(출처 없음)')===src);
+  document.getElementById('shelfModalTitle').textContent=src;
+  document.getElementById('shelfModalSub').textContent=`${items.length}개의 발췌`;
+  document.getElementById('shelfModalItems').innerHTML=items.map(e=>`
+    <div class="excerpt-item" style="margin-bottom:0">
+      <button class="excerpt-del" onclick="delExcerptModal(${e.id},'${srcEncoded}')">×</button>
+      <div class="excerpt-q">${e.text}</div>
+      <div class="excerpt-foot">${typeTag(e.type)}<span style="font-size:10px;color:var(--g200);margin-left:auto">${e.date}</span></div>
+    </div>`).join('');
+  document.getElementById('shelfModal').classList.add('open');
+}
+
+function delExcerptModal(id,srcEncoded){
+  excerpts=excerpts.filter(e=>e.id!==id); save();
+  openShelfModal(srcEncoded);
+  renderShelf();
+}
+
+function shelfModalClick(e){ if(e.target===document.getElementById('shelfModal')) document.getElementById('shelfModal').classList.remove('open'); }
+
+// ── 리마인드 탭 ────────────────────────────────────────
+function renderRemind(){
+  const el=document.getElementById('remindList');
+  const todayStr=today();
+  const older=excerpts.filter(e=>e.date<todayStr);
+  if(!older.length){
+    el.innerHTML='<div class="empty"><div class="ei">🔁</div>발췌를 쌓으면 다시 꺼내드려요</div>';
+    return;
+  }
+  const milestones=[1,3,7,14,30,60,90,180,365];
+  const items=[];
+  milestones.forEach(days=>{
+    const target=new Date(todayStr); target.setDate(target.getDate()-days);
+    const targetStr=`${target.getFullYear()}-${String(target.getMonth()+1).padStart(2,'0')}-${String(target.getDate()).padStart(2,'0')}`;
+    const dayExcerpts=older.filter(e=>e.date===targetStr);
+    if(dayExcerpts.length) items.push({days,excerpts:dayExcerpts});
+  });
+  if(!items.length){
+    const picks=older.slice(0,5);
+    el.innerHTML=picks.map(e=>{
+      const daysAgo=Math.round((new Date(todayStr)-new Date(e.date))/(1000*60*60*24));
+      return remindCardHTML(e,daysAgo);
+    }).join('');
+    return;
+  }
+  el.innerHTML=items.flatMap(item=>item.excerpts.map(e=>remindCardHTML(e,item.days))).join('');
+}
+
+function remindCardHTML(e,daysAgo){
+  return `<div class="remind-card">
+    <div class="remind-ago">${daysAgo}일 전</div>
+    <div class="excerpt-q">${e.text}</div>
+    <div class="excerpt-foot" style="margin-top:8px">
+      ${e.src?`<span class="excerpt-src">${e.src}</span>`:''}
+      ${typeTag(e.type)}
+    </div>
+    <div class="remind-acts">
+      <button class="remind-act" onclick="this.closest('.remind-card').style.display='none'">넘기기</button>
+      <button class="remind-act primary" onclick="shareExcerpt(${e.id})">공유하기</button>
+    </div>
+  </div>`;
+}
+
+// ── 기록 탭 ────────────────────────────────────────────
+let logYear=new Date().getFullYear(), logMonth=new Date().getMonth(), logPage=0;
+const LOG_CATS={study:'✏️ 공부',book:'📚 독서',lang:'🗣 언어',etc:'📌 기타'};
+
+function changeLogMonth(dir){
+  logMonth+=dir; if(logMonth>11){logMonth=0;logYear++;} if(logMonth<0){logMonth=11;logYear--;}
+  logPage=0; renderLogs();
+}
+function addLog(){
+  const cat=document.getElementById('log-cat').value;
+  const title=document.getElementById('ltitle').value.trim();
+  const min=parseInt(document.getElementById('lmin').value)||0;
+  const memo=document.getElementById('lmemo').value.trim();
+  if(!title||!min){toast('내용과 시간을 입력해주세요');return;}
+  logs.unshift({id:Date.now(),cat,title,min,memo,date:today()});
+  save(); logYear=new Date().getFullYear(); logMonth=new Date().getMonth(); logPage=0;
+  renderLogs(); ['ltitle','lmin','lmemo'].forEach(id=>document.getElementById(id).value='');
+  toast('기록됐어요!');
+}
+function delLog(id){ logs=logs.filter(l=>l.id!==id); save(); renderLogs(); }
+
+function renderLogs(){
+  const now=new Date();
+  document.getElementById('logMonthLabel').textContent=`${logYear}년 ${logMonth+1}월`;
+  const nextBtn=document.getElementById('logMonthNext');
+  const isCurrent=logYear>now.getFullYear()||(logYear===now.getFullYear()&&logMonth>=now.getMonth());
+  if(nextBtn){nextBtn.style.color=isCurrent?'var(--g200)':'var(--g400)';nextBtn.disabled=isCurrent;}
+  const prefix=`${logYear}-${String(logMonth+1).padStart(2,'0')}`;
+  const monthLogs=logs.filter(l=>l.date.startsWith(prefix));
+  const el=document.getElementById('logList');
+  if(!monthLogs.length){el.innerHTML='<div class="empty"><div class="ei">✏️</div>이 달의 기록이 없어요</div>';return;}
+  const grouped={};
+  monthLogs.forEach(l=>{if(!grouped[l.date])grouped[l.date]=[];grouped[l.date].push(l);});
+  const sortedDates=Object.keys(grouped).sort((a,b)=>b.localeCompare(a));
+  const PAGE_SIZE=7, totalPages=Math.ceil(sortedDates.length/PAGE_SIZE);
+  if(logPage>=totalPages)logPage=0;
+  const pageDates=sortedDates.slice(logPage*PAGE_SIZE,(logPage+1)*PAGE_SIZE);
+  const todayStr=today();
+  const cardsHTML=pageDates.map(date=>{
+    const d=new Date(date+'T00:00:00');
+    const isToday=date===todayStr;
+    const totalMin=grouped[date].reduce((s,l)=>s+l.min,0);
+    const safeKey=date.replace(/-/g,'');
+    const items=grouped[date].map(l=>`
+      <div class="log-item">
+        <div class="log-dot">${LOG_CATS[l.cat]?.split(' ')[0]||'📌'}</div>
+        <div class="log-body">
+          <div class="log-name">${l.title}</div>
+          <div class="log-sub">${l.memo||''}${l.memo?' · ':''}<span style="font-size:11px;background:var(--primary-light);color:var(--primary-dark);padding:1px 7px;border-radius:10px">${LOG_CATS[l.cat]||'📌 기타'}</span></div>
+        </div>
+        <div class="log-min">${l.min}분</div>
+        <button class="del" onclick="delLog(${l.id})">×</button>
+      </div>`).join('');
+    const dayLabel=`${logMonth+1}월 ${d.getDate()}일 ${DAYS[d.getDay()]}요일`;
+    return `<div class="card" style="padding:0;overflow:hidden;margin-bottom:8px">
+      <div onclick="toggleLogDay('${safeKey}')" style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;cursor:pointer">
+        <div style="display:flex;align-items:center;gap:8px">
+          <span id="la-${safeKey}" style="font-size:14px;color:var(--g400)">${isToday?'⌄':'›'}</span>
+          <span style="font-size:13px;font-weight:600;color:${isToday?'var(--primary)':'var(--g900)'}">${dayLabel}${isToday?' <span style="font-size:10px;background:var(--primary);color:#fff;padding:1px 6px;border-radius:10px">오늘</span>':''}</span>
+        </div>
+        <span style="font-size:12px;color:var(--primary);font-weight:500">${totalMin}분</span>
+      </div>
+      <div id="lb-${safeKey}" style="display:${isToday?'block':'none'};padding:0 14px 12px;border-top:1px solid var(--g100)">${items}</div>
+    </div>`;
+  }).join('');
+  let pageNav='';
+  if(totalPages>1){
+    const btns=Array.from({length:totalPages},(_,i)=>`<button onclick="goLogPage(${i})" style="width:32px;height:32px;border-radius:50%;border:1px solid ${i===logPage?'var(--primary)':'var(--g200)'};background:${i===logPage?'var(--primary)':'#fff'};color:${i===logPage?'#fff':'var(--g400)'};font-family:'Pretendard',sans-serif;font-size:13px;font-weight:500;cursor:pointer">${i+1}</button>`).join('');
+    pageNav=`<div style="display:flex;justify-content:center;gap:8px;margin-top:12px">${btns}</div>`;
+  }
+  el.innerHTML=cardsHTML+pageNav;
+}
+function toggleLogDay(k){ const b=document.getElementById('lb-'+k),a=document.getElementById('la-'+k); const o=b.style.display!=='none'; b.style.display=o?'none':'block'; a.textContent=o?'›':'⌄'; }
+function goLogPage(p){ logPage=p; renderLogs(); }
+
+// ── 통계 ───────────────────────────────────────────────
+let statsYear=new Date().getFullYear(), statsMonth=new Date().getMonth();
+function changeStatsMonth(dir){
+  statsMonth+=dir; if(statsMonth>11){statsMonth=0;statsYear++;} if(statsMonth<0){statsMonth=11;statsYear--;}
+  renderStats();
+}
+function renderStats(){
+  const now=new Date();
+  document.getElementById('statsMonthLabel').textContent=`${statsYear}년 ${statsMonth+1}월`;
+  const nextBtn=document.getElementById('statsMonthNext');
+  const isCurrent=statsYear>now.getFullYear()||(statsYear===now.getFullYear()&&statsMonth>=now.getMonth());
+  if(nextBtn){nextBtn.style.color=isCurrent?'var(--g200)':'var(--g400)';nextBtn.disabled=isCurrent;}
+  const prefix=`${statsYear}-${String(statsMonth+1).padStart(2,'0')}`;
+  const monthLogs=logs.filter(l=>l.date.startsWith(prefix));
+  const total=monthLogs.reduce((s,l)=>s+l.min,0);
+  const uDays=new Set(monthLogs.map(l=>l.date)).size;
+  const totalH=Math.floor(total/60),totalM=total%60;
+  document.getElementById('statGrid').innerHTML=`
+    <div class="stat-box" style="background:var(--t100)"><div class="stat-lbl">총 학습 시간</div><div class="stat-val" style="font-size:18px;color:var(--t600)">${totalH>0?totalH+'시간 '+totalM+'분':totalM+'분'||'0분'}</div></div>
+    <div class="stat-box" style="background:var(--g100)"><div class="stat-lbl">학습한 날</div><div class="stat-val" style="color:var(--g700)">${uDays}<span class="stat-unit">일</span></div></div>`;
+  const lastDate=new Date(statsYear,statsMonth+1,0).getDate();
+  const labels=[],data=[];
+  for(let d=1;d<=lastDate;d++){
+    const ds=`${prefix}-${String(d).padStart(2,'0')}`;
+    labels.push(d+'일'); data.push(logs.filter(l=>l.date===ds).reduce((s,l)=>s+l.min,0));
+  }
+  const pc=getComputedStyle(document.documentElement).getPropertyValue('--primary').trim();
+  if(dc)dc.destroy();
+  dc=new Chart(document.getElementById('dailyC'),{
+    type:'bar',
+    data:{labels,datasets:[{label:'분',data,backgroundColor:data.map(v=>v>0?pc:'var(--g100)'),borderRadius:4,borderSkipped:false}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{font:{size:9},maxRotation:0},grid:{display:false}},y:{ticks:{font:{size:10}},beginAtZero:true,grid:{color:'rgba(0,0,0,0.04)'}}}}
+  });
+}
+
+// ── 스트릭 ─────────────────────────────────────────────
+let streakYear=new Date().getFullYear(), streakMonth=new Date().getMonth();
+function changeStreakMonth(dir){
+  streakMonth+=dir; if(streakMonth>11){streakMonth=0;streakYear++;} if(streakMonth<0){streakMonth=11;streakYear--;}
+  renderStreak();
+}
+function renderStreak(){
+  const now=new Date(), td3=today();
+  const pc=getComputedStyle(document.documentElement).getPropertyValue('--primary').trim();
+  document.getElementById('streakMonthLabel').textContent=`${streakYear}년 ${streakMonth+1}월`;
+  const nextBtn=document.getElementById('streakNext');
+  const isCurrent=streakYear>now.getFullYear()||(streakYear===now.getFullYear()&&streakMonth>=now.getMonth());
+  if(nextBtn){nextBtn.style.color=isCurrent?'var(--g200)':'var(--g400)';nextBtn.disabled=isCurrent;}
+  const logMap={};
+  logs.forEach(l=>{if(!logMap[l.date])logMap[l.date]=0;logMap[l.date]+=l.min;});
+  const allMins=Object.values(logMap); const maxMin=Math.max(...allMins,60);
+  const firstDay=new Date(streakYear,streakMonth,1).getDay();
+  const lastDate=new Date(streakYear,streakMonth+1,0).getDate();
+  let html=`<div class="ring-row-labels">${DAYS.map(d=>`<div class="ring-row-lbl">${d}</div>`).join('')}</div><div class="ring-grid">`;
+  for(let i=0;i<firstDay;i++)html+='<div></div>';
+  for(let d=1;d<=lastDate;d++){
+    const ds=`${streakYear}-${String(streakMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const isToday=ds===td3, isFuture=ds>td3;
+    const m=logMap[ds]||0;
+    const r=12,circ=2*Math.PI*r;
+    const ratio=m>0?Math.max(m/maxMin,.08):0;
+    const dash=ratio*circ,gap=circ-dash;
+    const numText=m>=60?`${Math.round(m/60)}h`:m>0?String(m):'';
+    html+=`<div class="ring-cell"><div class="ring-wrap${isToday?' today-ring':''}">
+      <svg width="32" height="32" viewBox="0 0 32 32">
+        <circle cx="16" cy="16" r="${r}" fill="none" stroke="${isFuture?'#ebebeb':'var(--g100)'}" stroke-width="3"/>
+        ${m>0&&!isFuture?`<circle cx="16" cy="16" r="${r}" fill="none" stroke="${pc}" stroke-width="3" stroke-dasharray="${dash.toFixed(2)} ${gap.toFixed(2)}" stroke-linecap="round" transform="rotate(-90 16 16)"/>`:''}
+      </svg>
+      <div class="ring-num" style="color:${m>0?pc:'var(--g200)'}">${numText||d}</div>
+    </div></div>`;
+  }
+  html+='</div>';
+  document.getElementById('ringCal').innerHTML=html;
+  const allDates=[...new Set(logs.map(l=>l.date))].sort();
+  let streak=0;
+  if(logMap[td3]){let s=1;const sd=new Date(td3);while(true){sd.setDate(sd.getDate()-1);const ds=`${sd.getFullYear()}-${String(sd.getMonth()+1).padStart(2,'0')}-${String(sd.getDate()).padStart(2,'0')}`;if(logMap[ds])s++;else break;}streak=s;}
+  document.getElementById('curS').textContent=streak;
+  document.getElementById('totD').textContent=allDates.length;
+}
+
+// ── 설정 ───────────────────────────────────────────────
+function openSettings(){ renderSwatches(); updateDriveUI(); document.getElementById('settingsOverlay').classList.add('open'); }
+function closeSettings(){ document.getElementById('settingsOverlay').classList.remove('open'); }
+function overlayClick(e){ if(e.target===document.getElementById('settingsOverlay'))closeSettings(); }
+
+function shareApp(){
+  const url='https://land1st.github.io/underline/';
+  const text='underline. — 밑줄이 쌓여 나를 만든다 📖';
+  if(navigator.share) navigator.share({title:'underline.',text,url}).then(()=>toast('공유됐어요!')).catch(()=>{});
+  else navigator.clipboard.writeText(url).then(()=>toast('링크가 복사됐어요!'));
+}
+
+function exportJSON(){
+  const data={excerpts,logs,exportedAt:new Date().toISOString(),version:1};
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download=`underline-${today()}.json`;a.click();
+  URL.revokeObjectURL(url); toast('파일이 저장됐어요');
+}
+
+function importJSON(event){
+  const file=event.target.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    try{
+      const data=JSON.parse(e.target.result);
+      if(!confirm('현재 데이터에 병합됩니다. 계속할까요?'))return;
+      if(data.excerpts){
+        const existIds=new Set(excerpts.map(ex=>ex.id));
+        excerpts=[...data.excerpts.filter(ex=>!existIds.has(ex.id)),...excerpts].sort((a,b)=>b.id-a.id);
+      }
+      if(data.logs){
+        const existIds=new Set(logs.map(l=>l.id));
+        logs=[...data.logs.filter(l=>!existIds.has(l.id)),...logs].sort((a,b)=>b.id-a.id);
+      }
+      save(); renderExcerpts(); renderRemindHero();
+      toast('가져오기 완료!');
+    }catch{toast('파일을 읽는 중 오류가 발생했어요');}
+    event.target.value='';
+  };
+  reader.readAsText(file);
+}
+
+function confirmReset(){
+  if(!confirm('모든 발췌 기록이 삭제됩니다.\n정말 초기화할까요?'))return;
+  excerpts=[];logs=[];save();renderExcerpts();renderRemindHero();closeSettings();
+  toast('데이터가 초기화됐어요');
+}
+
+// ── 초기화 ─────────────────────────────────────────────
+applyOpts();
+updateSrcSuggestions();
+renderExcerpts();
+renderRemindHero();
+</script>
+</body>
+</html>
