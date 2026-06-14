@@ -69,8 +69,12 @@ html,body{background:var(--g50);font-family:'Pretendard',-apple-system,sans-seri
 .btn{font-family:'Pretendard',sans-serif;font-size:14px;font-weight:500;padding:10px 16px;border-radius:8px;cursor:pointer;border:none;transition:opacity .15s}
 .btn:hover{opacity:.85}
 .btn-primary{background:var(--primary);color:#fff;width:100%;margin-top:6px}
+.btn-outline{background:#fff;border:1px solid var(--g200);color:var(--g700)}
 
 /* 리마인드 카드 (발췌탭 상단) */
+#recentCovers{display:flex;gap:8px;margin-bottom:12px}
+.recent-cover{width:56px;height:56px;border-radius:8px;overflow:hidden;border:1px solid var(--g200);cursor:pointer;flex-shrink:0}
+.recent-cover img{width:100%;height:100%;object-fit:cover;display:block}
 .remind-hero{background:var(--primary);border-radius:12px;padding:18px;margin-bottom:12px;cursor:pointer;height:200px;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden}
 .remind-hero-eye{font-size:11px;color:#9d97e8;font-weight:500;letter-spacing:.5px;margin-bottom:10px;flex-shrink:0}
 .remind-hero-q{font-size:17px;color:#fff;line-height:1.7;font-weight:400;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;flex:1}
@@ -396,6 +400,7 @@ html,body{background:var(--g50);font-family:'Pretendard',-apple-system,sans-seri
 
 <!-- 발췌 탭 -->
 <div class="sec on" id="sec-excerpt">
+  <div id="recentCovers" style="display:none"></div>
   <div id="remindHero"></div>
   <div class="card">
     <div class="card-title">발췌 추가</div>
@@ -417,6 +422,22 @@ html,body{background:var(--g50);font-family:'Pretendard',-apple-system,sans-seri
           <option value="video">▶ 영상</option>
           <option value="etc">✏️ 기타</option>
         </select>
+      </div>
+    </div>
+    <div class="form-row" style="align-items:flex-start">
+      <div class="fg" style="flex:1">
+        <input id="ex-cover-url" placeholder="표지/커버 이미지 URL (선택)"/>
+      </div>
+      <div class="fg" style="flex:0 0 auto">
+        <input type="file" id="ex-cover-file" accept="image/*" style="display:none" onchange="onCoverFileChange(event)">
+        <button type="button" class="btn btn-outline" style="padding:9px 14px;font-size:13px;white-space:nowrap" onclick="document.getElementById('ex-cover-file').click()">📷 업로드</button>
+      </div>
+    </div>
+    <div id="coverPreviewWrap" style="display:none;margin-bottom:8px">
+      <div style="display:flex;align-items:center;gap:8px">
+        <img id="coverPreviewImg" style="width:44px;height:44px;border-radius:8px;object-fit:cover;border:1px solid var(--g200)"/>
+        <span style="font-size:12px;color:var(--g400)">커버 이미지 첨부됨</span>
+        <button type="button" onclick="clearCover()" style="background:none;border:none;color:var(--g200);cursor:pointer;font-size:14px;margin-left:auto;padding:2px 6px">×</button>
       </div>
     </div>
     <button class="btn btn-primary" onclick="addExcerpt()">+ 저장</button>
@@ -520,6 +541,7 @@ html,body{background:var(--g50);font-family:'Pretendard',-apple-system,sans-seri
 <div class="excerpt-popup-overlay" id="excerptPopup" onclick="excerptPopupClick(event)">
   <div class="excerpt-popup">
     <div class="excerpt-popup-handle"></div>
+    <img id="popupCover" style="display:none;width:100%;max-height:240px;object-fit:cover;border-radius:10px;margin-bottom:14px"/>
     <div class="excerpt-popup-q" id="popupQ"></div>
     <div class="excerpt-popup-src" id="popupSrc" style="display:none"></div>
     <div class="excerpt-popup-foot" id="popupFoot"></div>
@@ -752,7 +774,7 @@ async function driveLoad(){
       }
       localStorage.setItem('ul-excerpts',JSON.stringify(excerpts));
       localStorage.setItem('ul-logs',JSON.stringify(logs));
-      renderExcerpts(); renderRemindHero();
+      renderExcerpts(); renderRemindHero(); renderRecentCovers(); updateSrcSuggestions();
     }
     setSyncIcon(false);
   }catch(e){setSyncIcon(false);toast('Drive 불러오기 실패');}
@@ -808,23 +830,56 @@ function updateDriveUI(){
 
 // ── 발췌 ───────────────────────────────────────────────
 let exYear=new Date().getFullYear(), exMonth=new Date().getMonth();
+let pendingCover=null; // base64 데이터 또는 null
 
 function changeExMonth(dir){
   exMonth+=dir; if(exMonth>11){exMonth=0;exYear++;} if(exMonth<0){exMonth=11;exYear--;}
   renderExcerpts();
 }
 
+function onCoverFileChange(ev){
+  const file=ev.target.files[0]; if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const img=new Image();
+    img.onload=()=>{
+      const MAX=240;
+      let w=img.width,h=img.height;
+      if(w>h){ if(w>MAX){h=Math.round(h*MAX/w);w=MAX;} } else { if(h>MAX){w=Math.round(w*MAX/h);h=MAX;} }
+      const canvas=document.createElement('canvas');
+      canvas.width=w; canvas.height=h;
+      canvas.getContext('2d').drawImage(img,0,0,w,h);
+      pendingCover=canvas.toDataURL('image/jpeg',0.8);
+      document.getElementById('coverPreviewImg').src=pendingCover;
+      document.getElementById('coverPreviewWrap').style.display='block';
+      document.getElementById('ex-cover-url').value='';
+    };
+    img.src=e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function clearCover(){
+  pendingCover=null;
+  document.getElementById('ex-cover-file').value='';
+  document.getElementById('coverPreviewWrap').style.display='none';
+}
+
 function addExcerpt(){
   const text=document.getElementById('ex-text').value.trim();
   const src=document.getElementById('ex-src').value.trim();
   const type=document.getElementById('ex-type').value;
+  const coverUrl=document.getElementById('ex-cover-url').value.trim();
+  const cover=pendingCover||coverUrl||'';
   if(!text){toast('문장을 입력해주세요');return;}
-  excerpts.unshift({id:Date.now(),text,src,type,date:today()});
+  excerpts.unshift({id:Date.now(),text,src,type,cover,date:today()});
   save();
   exYear=new Date().getFullYear(); exMonth=new Date().getMonth();
-  renderExcerpts(); renderRemindHero(); updateSrcSuggestions();
+  renderExcerpts(); renderRemindHero(); renderRecentCovers(); updateSrcSuggestions();
   document.getElementById('ex-text').value='';
   document.getElementById('ex-src').value='';
+  document.getElementById('ex-cover-url').value='';
+  clearCover();
   toast('저장됐어요!');
 }
 
@@ -834,13 +889,15 @@ function openExcerptPopup(id){
   const srcEl=document.getElementById('popupSrc');
   srcEl.textContent=e.src||''; srcEl.style.display=e.src?'block':'none';
   document.getElementById('popupFoot').innerHTML=typeTag(e.type);
+  const coverEl=document.getElementById('popupCover');
+  if(e.cover){ coverEl.src=e.cover; coverEl.style.display='block'; } else { coverEl.style.display='none'; }
   document.getElementById('popupShare').onclick=()=>shareExcerpt(id);
   document.getElementById('excerptPopup').classList.add('open');
 }
 function closeExcerptPopup(){ document.getElementById('excerptPopup').classList.remove('open'); }
 function excerptPopupClick(ev){ if(ev.target===document.getElementById('excerptPopup'))closeExcerptPopup(); }
 
-function delExcerpt(id){ excerpts=excerpts.filter(e=>e.id!==id); save(); renderExcerpts(); renderRemindHero(); }
+function delExcerpt(id){ excerpts=excerpts.filter(e=>e.id!==id); save(); renderExcerpts(); renderRemindHero(); renderRecentCovers(); }
 
 function typeTag(type){
   const m=TYPE_META[type]||TYPE_META.etc;
@@ -850,6 +907,19 @@ function typeTag(type){
 function updateSrcSuggestions(){
   const srcs=[...new Set(excerpts.map(e=>e.src).filter(Boolean))];
   document.getElementById('srcSuggestions').innerHTML=srcs.map(s=>`<option value="${s}">`).join('');
+}
+
+// 최근 커버 이미지 3개
+function renderRecentCovers(){
+  const el=document.getElementById('recentCovers');
+  if(!el)return;
+  const withCover=excerpts.filter(e=>e.cover).slice(0,3);
+  if(!withCover.length){ el.innerHTML=''; el.style.display='none'; return; }
+  el.style.display='flex';
+  el.innerHTML=withCover.map(e=>`
+    <div class="recent-cover" onclick="openExcerptPopup(${e.id})">
+      <img src="${e.cover}" alt="">
+    </div>`).join('');
 }
 
 function renderExcerpts(){
@@ -884,12 +954,15 @@ function renderExcerpts(){
     const dayLabel=`${exMonth+1}월 ${d.getDate()}일 ${DAYS[d.getDay()]}요일`;
     const safeKey=date.replace(/-/g,'');
     const items=grouped[date].map(e=>`
-      <div class="excerpt-item" onclick="openExcerptPopup(${e.id})">
+      <div class="excerpt-item" onclick="openExcerptPopup(${e.id})" style="${e.cover?'display:flex;gap:12px;align-items:flex-start':''}">
         <button class="excerpt-del" onclick="event.stopPropagation();delExcerpt(${e.id})">×</button>
-        <div class="excerpt-q">${e.text}</div>
-        <div class="excerpt-foot">
-          ${e.src?`<span class="excerpt-src">${e.src}</span>`:''}
-          ${typeTag(e.type)}
+        ${e.cover?`<img src="${e.cover}" style="width:44px;height:44px;border-radius:8px;object-fit:cover;flex-shrink:0">`:''}
+        <div style="flex:1;min-width:0">
+          <div class="excerpt-q">${e.text}</div>
+          <div class="excerpt-foot">
+            ${e.src?`<span class="excerpt-src">${e.src}</span>`:''}
+            ${typeTag(e.type)}
+          </div>
         </div>
       </div>`).join('');
     return `
@@ -1234,7 +1307,7 @@ function importJSON(event){
         const existIds=new Set(logs.map(l=>l.id));
         logs=[...data.logs.filter(l=>!existIds.has(l.id)),...logs].sort((a,b)=>b.id-a.id);
       }
-      save(); renderExcerpts(); renderRemindHero();
+      save(); renderExcerpts(); renderRemindHero(); renderRecentCovers(); updateSrcSuggestions();
       toast('가져오기 완료!');
     }catch{toast('파일을 읽는 중 오류가 발생했어요');}
     event.target.value='';
@@ -1244,7 +1317,7 @@ function importJSON(event){
 
 function confirmReset(){
   if(!confirm('모든 발췌 기록이 삭제됩니다.\n정말 초기화할까요?'))return;
-  excerpts=[];logs=[];save();renderExcerpts();renderRemindHero();closeSettings();
+  excerpts=[];logs=[];save();renderExcerpts();renderRemindHero();renderRecentCovers();closeSettings();
   toast('데이터가 초기화됐어요');
 }
 
@@ -1253,6 +1326,7 @@ applyOpts();
 updateSrcSuggestions();
 renderExcerpts();
 renderRemindHero();
+renderRecentCovers();
 </script>
 </body>
 </html>
