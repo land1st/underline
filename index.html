@@ -87,6 +87,8 @@ html,body{background:var(--bg);font-family:'Pretendard',-apple-system,sans-serif
 .remind-hero-q::before,.remind-hero-q::after{content:none}
 .remind-hero-cover{flex:0 0 auto;width:76px;height:76px;border-radius:12px;border:1px solid rgba(0,0,0,.06);position:relative;overflow:hidden;background-size:cover;background-position:center}
 .remind-hero-cover img{width:100%;height:100%;object-fit:cover;display:block}
+.remind-hero-cover.has-img{width:76px;height:auto;border-radius:12px}
+.remind-hero-cover.has-img img{width:100%;height:auto;object-fit:contain;border-radius:12px}
 .remind-hero-cover-dot{position:absolute;top:10px;right:10px;width:13px;height:13px;border:1.8px solid rgba(0,0,0,.22);border-radius:50%}
 .remind-hero-cover-type{position:absolute;left:9px;bottom:9px;font-size:9px;font-weight:800;color:rgba(0,0,0,.4);letter-spacing:.02em;text-transform:uppercase}
 .remind-hero-src{font-size:14px;color:var(--muted);margin-top:12px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -417,7 +419,6 @@ html,body{background:var(--bg);font-family:'Pretendard',-apple-system,sans-serif
 
 <!-- 발췌 탭 -->
 <div class="sec on" id="sec-excerpt">
-  <div id="recentCovers" style="display:none"></div>
   <div id="remindHero"></div>
   <div class="card">
     <div class="card-title">발췌 추가</div>
@@ -967,10 +968,13 @@ function excerptPopupClick(ev){ if(ev.target===document.getElementById('excerptP
 function delExcerpt(id){ excerpts=excerpts.filter(e=>e.id!==id); save(); renderExcerpts(); renderRemindHero(); renderRecentCovers(); }
 
 function coverThumbHTML(e,size){
-  // size: 'list' (42x56) or 'hero' (76x76)
+  // size: 'list' (42x56) or 'hero' (76px wide, natural ratio when image present)
   const bg=TYPE_META[e.type]?.bg||TYPE_META.etc.bg;
   if(e.cover){
-    return `<div class="${size==='hero'?'remind-hero-cover':'excerpt-cover-thumb'}" style="background-color:${bg}"><img src="${e.cover}"></div>`;
+    if(size==='hero'){
+      return `<div class="remind-hero-cover has-img"><img src="${e.cover}"></div>`;
+    }
+    return `<div class="excerpt-cover-thumb" style="background-color:${bg}"><img src="${e.cover}"></div>`;
   }
   if(size==='hero'){
     return `<div class="remind-hero-cover" style="background-color:${bg}">
