@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>underline. — 밑줄이 쌓여 나를 만든다</title>
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#534ab7">
+<meta name="theme-color" content="#FBFAF7">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="underline.">
@@ -19,145 +19,180 @@
 :root{
   --primary:#534ab7;--primary-light:#eeedfe;--primary-mid:#7f77dd;--primary-dark:#3c3489;
   --t100:#e1f5ee;--t400:#1d9e75;--t600:#0f6e56;
-  --g50:#f8f7f4;--g100:#f1efe8;--g200:#d3d1c7;--g400:#888780;--g700:#444441;--g900:#1a1916;
+  --bg:#FBFAF7;--ink:#1D1B17;--muted:#A39C92;--line:#EDE9E1;--pill-bg:#F0EDE6;--thumb-track:#DDD7CE;
+  --g50:#FBFAF7;--g100:#EDE9E1;--g200:#DDD7CE;--g400:#A39C92;--g700:#5C564E;--g900:#1D1B17;
 }
-html,body{background:var(--g50);font-family:'Pretendard',-apple-system,sans-serif;color:var(--g900);font-size:16px;line-height:1.5}
-.app{max-width:480px;margin:0 auto;background:var(--g50);min-height:100vh}
+html,body{background:var(--bg);font-family:'Pretendard',-apple-system,sans-serif;color:var(--ink);font-size:16px;line-height:1.5}
+.app{max-width:480px;margin:0 auto;background:var(--bg);min-height:100vh}
 
 /* 헤더 */
-.hd{padding:14px 16px 8px;display:flex;align-items:center;justify-content:space-between}
-.logo{display:flex;align-items:center;gap:8px}
-.logo-icon{width:28px;height:28px;background:var(--primary);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.logo-text{font-size:17px;font-weight:700;letter-spacing:-.3px;color:var(--g900)}
-.hd-right{display:flex;align-items:center;gap:8px}
-.today-pill{background:var(--primary-light);color:var(--primary-dark);font-size:12px;font-weight:500;padding:4px 10px;border-radius:20px}
-.settings-btn{width:32px;height:32px;border-radius:50%;background:#fff;border:1px solid var(--g200);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .15s}
-.settings-btn:hover{background:var(--g100)}
+.hd{padding:18px 26px 12px;display:flex;align-items:flex-start;justify-content:space-between}
+.logo{display:flex;flex-direction:column}
+.logo-icon{display:none}
+.logo-text{font-size:23px;font-weight:800;letter-spacing:-.03em;color:var(--ink)}
+.logo-underline{height:3px;width:80px;background:var(--ink);border-radius:2px;margin-top:5px}
+.hd-right{display:flex;align-items:center;gap:14px;padding-top:4px}
+.today-pill{color:var(--muted);font-size:13px;font-weight:500;background:none;padding:0}
+.settings-btn{width:auto;height:auto;border-radius:0;background:none;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--muted)}
+.settings-btn:hover{opacity:.7;background:none}
 
 /* 드라이브 바 */
-.drive-bar{display:flex;align-items:center;justify-content:space-between;padding:6px 16px;font-size:11px;min-height:34px}
-.drive-user{display:flex;align-items:center;gap:8px;color:var(--g700)}
+.drive-bar{display:flex;align-items:center;justify-content:space-between;padding:0 26px 10px;font-size:11px;min-height:30px}
+.drive-user{display:flex;align-items:center;gap:8px;color:var(--muted)}
 .drive-avatar{width:20px;height:20px;border-radius:50%;object-fit:cover}
-.drive-btn{font-family:'Pretendard',sans-serif;font-size:11px;font-weight:500;padding:4px 12px;border-radius:20px;cursor:pointer;border:1px solid var(--g200);background:#fff;color:var(--g700);transition:all .15s}
-.drive-btn:hover{background:var(--g100)}
-.drive-btn.primary{background:var(--primary);color:#fff;border-color:var(--primary)}
-.drive-sync-ico{color:var(--g400)}
+.drive-btn{font-family:'Pretendard',sans-serif;font-size:12px;font-weight:600;padding:5px 12px;border-radius:8px;cursor:pointer;border:1px solid var(--line);background:var(--bg);color:var(--muted);transition:all .15s}
+.drive-btn:hover{background:var(--pill-bg)}
+.drive-btn.primary{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.drive-sync-ico{color:var(--muted)}
 .drive-sync-ico.spinning{animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-.drive-status{font-size:10px;color:var(--g400)}
+.drive-status{font-size:10px;color:var(--muted)}
 
 /* 탭 */
-.tabs{display:flex;gap:6px;padding:0 16px 12px}
-.tab{flex:1;padding:8px 4px;font-size:13px;font-weight:500;color:var(--g400);cursor:pointer;text-align:center;border-radius:20px;border:1px solid var(--g200);background:#fff;transition:all .18s}
-.tab.on{color:#fff;background:var(--primary);border-color:var(--primary)}
+.tabs{display:flex;gap:26px;padding:0 26px;border-bottom:1px solid var(--line);margin-bottom:0}
+.tab{flex:none;padding:0 0 12px;font-size:16px;font-weight:500;color:var(--muted);cursor:pointer;text-align:left;border-radius:0;border:none;background:none;position:relative;transition:color .15s}
+.tab.on{color:var(--ink);font-weight:700}
+.tab.on::after{content:'';position:absolute;left:0;right:0;bottom:-1px;height:3px;background:var(--ink);border-radius:2px}
 
 /* 섹션 */
-.main{padding:0 16px 80px}
+.main{padding:0 26px 80px;padding-top:20px}
 .sec{display:none}.sec.on{display:block}
 
 /* 카드 */
-.card{background:#fff;border-radius:12px;border:1px solid var(--g200);padding:16px;margin-bottom:12px}
-.card-title{font-size:12px;font-weight:500;color:var(--g400);letter-spacing:.4px;margin-bottom:12px}
+.card{background:var(--bg);border-radius:14px;border:1px solid var(--line);padding:16px;margin-bottom:12px}
+.card-title{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;margin-bottom:14px}
 
 /* 폼 */
 .fg{display:flex;flex-direction:column;gap:4px}
-.fg label{font-size:12px;color:var(--g400);font-weight:500}
-.fg input,.fg select,.fg textarea{font-family:'Pretendard',sans-serif;font-size:14px;padding:9px 10px;border:1px solid var(--g200);border-radius:8px;background:var(--g50);color:var(--g900);outline:none;transition:border-color .15s;width:100%}
-.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--primary)}
+.fg label{font-size:12px;color:var(--muted);font-weight:500}
+.fg input,.fg select,.fg textarea{font-family:'Pretendard',sans-serif;font-size:14px;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);outline:none;transition:border-color .15s;width:100%}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--ink)}
 .fg textarea{resize:none;line-height:1.75}
 .form-row{display:flex;gap:8px;margin-bottom:8px}
-.btn{font-family:'Pretendard',sans-serif;font-size:14px;font-weight:500;padding:10px 16px;border-radius:8px;cursor:pointer;border:none;transition:opacity .15s}
+.btn{font-family:'Pretendard',sans-serif;font-size:14px;font-weight:600;padding:12px 16px;border-radius:12px;cursor:pointer;border:none;transition:opacity .15s}
 .btn:hover{opacity:.85}
-.btn-primary{background:var(--primary);color:#fff;width:100%;margin-top:6px}
-.btn-outline{background:#fff;border:1px solid var(--g200);color:var(--g700)}
+.btn-primary{background:var(--ink);color:var(--bg);width:100%;margin-top:6px}
+.btn-outline{background:var(--bg);border:1px solid var(--line);color:var(--g700)}
 
-/* 리마인드 카드 (발췌탭 상단) */
-#recentCovers{display:flex;gap:10px;margin-bottom:12px}
-.recent-cover{flex:1;aspect-ratio:1;border-radius:12px;overflow:hidden;border:1px solid var(--g200);cursor:pointer}
+/* 최근 커버 */
+#recentCovers{display:flex;gap:10px;margin-bottom:18px}
+.recent-cover{flex:1;aspect-ratio:1;border-radius:12px;overflow:hidden;border:1px solid var(--line);cursor:pointer}
 .recent-cover img{width:100%;height:100%;object-fit:cover;display:block}
-.remind-hero{background:var(--primary);border-radius:12px;padding:18px;margin-bottom:12px;cursor:pointer;height:200px;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden}
-.remind-hero-eye{font-size:11px;color:#9d97e8;font-weight:500;letter-spacing:.5px;margin-bottom:10px;flex-shrink:0}
-.remind-hero-q{font-size:17px;color:#fff;line-height:1.7;font-weight:400;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;flex:1}
-.remind-hero-q::before{content:'\201C';font-size:24px;color:#9d97e8;vertical-align:-5px;margin-right:2px}
-.remind-hero-q::after{content:'\201D';font-size:24px;color:#9d97e8;vertical-align:-5px;margin-left:2px}
-.remind-hero-src{font-size:13px;color:#9d97e8;margin-top:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex-shrink:0}
-.remind-hero-acts{display:flex;justify-content:flex-end;gap:6px;margin-top:10px;flex-shrink:0}
-.remind-hero-btn{font-size:12px;padding:6px 14px;border-radius:20px;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.1);color:#fff;cursor:pointer;font-family:'Pretendard',sans-serif;transition:background .15s}
-.remind-hero-btn:hover{background:rgba(255,255,255,.2)}
+
+/* 히어로 섹션 — 타이포 중심, 박스 없음 */
+.remind-hero{padding:0;margin-bottom:20px;cursor:pointer;display:block;height:auto;overflow:visible;background:none}
+.remind-hero-eye{font-size:11px;font-weight:700;letter-spacing:.14em;color:var(--muted);text-transform:uppercase;margin-bottom:14px}
+.remind-hero-body{display:flex;gap:16px;align-items:flex-start}
+.remind-hero-q{flex:1;min-width:0;font-size:21px;line-height:1.55;font-weight:700;letter-spacing:-.02em;color:var(--ink);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.remind-hero-q::before,.remind-hero-q::after{content:none}
+.remind-hero-cover{flex:0 0 auto;width:76px;height:76px;border-radius:12px;border:1px solid rgba(0,0,0,.06);position:relative;overflow:hidden;background-size:cover;background-position:center}
+.remind-hero-cover img{width:100%;height:100%;object-fit:cover;display:block}
+.remind-hero-cover-dot{position:absolute;top:10px;right:10px;width:13px;height:13px;border:1.8px solid rgba(0,0,0,.22);border-radius:50%}
+.remind-hero-cover-type{position:absolute;left:9px;bottom:9px;font-size:9px;font-weight:800;color:rgba(0,0,0,.4);letter-spacing:.02em;text-transform:uppercase}
+.remind-hero-src{font-size:14px;color:var(--muted);margin-top:12px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.remind-hero-acts{display:flex;gap:20px;margin-top:16px;font-size:14px;font-weight:600;justify-content:flex-start}
+.remind-hero-btn{font-size:14px;padding:0;border:none;background:none;color:var(--ink);cursor:pointer;font-family:'Pretendard',sans-serif;font-weight:600;display:flex;align-items:center;gap:5px}
+.remind-hero-btn:last-child{color:var(--muted)}
+.remind-hero-btn:hover{opacity:.7;background:none}
+.remind-hero-divider{border-top:8px solid var(--line);margin:0 -26px 16px;padding-top:16px}
 
 /* 발췌 아이템 */
-.group-hd{font-size:11px;font-weight:600;color:var(--g400);letter-spacing:.3px;padding:8px 0 6px;border-top:1px solid var(--g100);margin-top:4px}
+.group-hd{font-size:14px;font-weight:700;color:var(--ink);letter-spacing:0;padding:14px 0 8px;border-top:none;margin-top:0;display:flex;align-items:center;justify-content:space-between}
 .group-hd:first-child{border-top:none;margin-top:0}
-.excerpt-item{background:#fff;border-radius:10px;border:1px solid var(--g200);padding:14px;margin-bottom:8px;position:relative;cursor:pointer}
+.group-hd-badge{font-size:11px;font-weight:700;color:var(--bg);background:var(--ink);padding:2px 7px;border-radius:4px;margin-left:8px}
+.group-hd-count{font-size:13px;color:var(--muted);font-weight:400}
+.excerpt-item{background:none;border:none;border-top:1px solid var(--line);border-radius:0;padding:12px 0;margin-bottom:0;position:relative;cursor:pointer;display:flex;gap:14px;align-items:flex-start}
 .excerpt-item:hover .excerpt-del{opacity:1}
-.excerpt-q{font-size:14px;color:var(--g900);line-height:1.8;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.excerpt-q::before{content:'\201C';font-size:19px;color:var(--primary);vertical-align:-3px;margin-right:2px}
-.excerpt-q::after{content:'\201D';font-size:19px;color:var(--primary);vertical-align:-3px;margin-left:2px}
-.excerpt-foot{display:flex;align-items:center;gap:7px;margin-top:9px;flex-wrap:wrap}
-.excerpt-src{font-size:11px;color:var(--g400)}
-.excerpt-src::before{content:'— '}
-.excerpt-del{position:absolute;top:10px;right:10px;background:none;border:none;font-size:14px;color:var(--g200);cursor:pointer;opacity:0;transition:opacity .15s;line-height:1;padding:2px 4px}
+.excerpt-cover-thumb{width:42px;height:56px;border-radius:6px;flex:0 0 auto;position:relative;overflow:hidden;box-shadow:inset 0 0 0 1px rgba(0,0,0,.06);background-size:cover;background-position:center}
+.excerpt-cover-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.excerpt-cover-thumb .line1{position:absolute;left:7px;right:7px;top:12px;height:2.5px;border-radius:2px;background:rgba(0,0,0,.2)}
+.excerpt-cover-thumb .line2{position:absolute;left:7px;right:14px;top:18px;height:2.5px;border-radius:2px;background:rgba(0,0,0,.11)}
+.excerpt-body{flex:1;min-width:0}
+.excerpt-q{font-size:15px;font-weight:600;color:var(--ink);line-height:1.55;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.excerpt-q::before,.excerpt-q::after{content:none}
+.excerpt-foot{display:flex;align-items:center;gap:5px;margin-top:5px;flex-wrap:wrap}
+.excerpt-src{font-size:13px;color:var(--muted);font-weight:500}
+.excerpt-src::before{content:''}
+.excerpt-del{position:absolute;top:10px;right:0;background:none;border:none;font-size:14px;color:var(--g200);cursor:pointer;opacity:0;transition:opacity .15s;line-height:1;padding:2px 4px}
 .excerpt-del:hover{color:#e24b4a}
 
 /* 발췌 전문 팝업 */
 .excerpt-popup-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:300;align-items:flex-end;justify-content:center}
 .excerpt-popup-overlay.open{display:flex}
-.excerpt-popup{background:#fff;border-radius:20px 20px 0 0;width:100%;max-width:480px;padding:22px 20px 44px;max-height:75vh;overflow-y:auto}
-.excerpt-popup-handle{width:36px;height:4px;border-radius:2px;background:var(--g200);margin:0 auto 18px}
-.excerpt-popup-q{font-size:16px;color:var(--g900);line-height:1.9}
-.excerpt-popup-q::before{content:'\201C';font-size:22px;color:var(--primary);vertical-align:-4px;margin-right:2px}
-.excerpt-popup-q::after{content:'\201D';font-size:22px;color:var(--primary);vertical-align:-4px;margin-left:2px}
-.excerpt-popup-src{font-size:13px;color:var(--g400);margin-top:12px}
-.excerpt-popup-src::before{content:'— '}
-.excerpt-popup-foot{display:flex;align-items:center;gap:8px;margin-top:16px;flex-wrap:wrap}
-.excerpt-popup-actions{display:flex;gap:8px;margin-top:16px}
-.excerpt-popup-btn{flex:1;font-family:'Pretendard',sans-serif;font-size:13px;font-weight:500;padding:10px;border-radius:9px;cursor:pointer;border:1px solid var(--g200);background:#fff;color:var(--g700);transition:background .15s}
-.excerpt-popup-btn:hover{background:var(--g100)}
-.excerpt-popup-btn.primary{background:var(--primary);color:#fff;border-color:var(--primary)}
+.excerpt-popup{background:var(--bg);border-radius:28px 28px 0 0;width:100%;max-width:480px;padding:22px 24px 44px;max-height:75vh;overflow-y:auto}
+.excerpt-popup-handle{width:36px;height:4px;border-radius:2px;background:var(--thumb-track);margin:0 auto 18px}
+.excerpt-popup-q{font-size:19px;font-weight:700;letter-spacing:-.02em;color:var(--ink);line-height:1.6}
+.excerpt-popup-src{font-size:14px;color:var(--muted);margin-top:14px;font-weight:500}
+.excerpt-popup-src::before{content:''}
+.excerpt-popup-foot{display:flex;align-items:center;gap:8px;margin-top:10px;flex-wrap:wrap}
+.excerpt-popup-actions{display:flex;gap:8px;margin-top:20px}
+.excerpt-popup-btn{flex:1;font-family:'Pretendard',sans-serif;font-size:14px;font-weight:600;padding:13px;border-radius:12px;cursor:pointer;border:1px solid var(--line);background:var(--bg);color:var(--g700);transition:opacity .15s}
+.excerpt-popup-btn:hover{opacity:.7}
+.excerpt-popup-btn.primary{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 
 /* 유형 태그 */
-.type-tag{font-size:10px;font-weight:500;padding:2px 8px;border-radius:20px;white-space:nowrap}
-.tt-book{background:#eeedfe;color:#3c3489}
-.tt-article{background:#e6f1fb;color:#0c447c}
-.tt-lecture{background:#e1f5ee;color:#0f6e56}
-.tt-podcast{background:#faeeda;color:#854f0b}
-.tt-music{background:#fbeaf0;color:#72243e}
-.tt-video{background:#faece7;color:#712b13}
-.tt-etc{background:#f1efe8;color:#444441}
+.type-tag{font-size:13px;font-weight:500;color:var(--muted)}
 
 /* 책장 */
-.filter-scroll{display:flex;gap:6px;padding:0 0 10px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
-.filter-scroll::-webkit-scrollbar{display:none}
-.fc{font-size:12px;font-weight:500;padding:5px 12px;border-radius:20px;white-space:nowrap;cursor:pointer;transition:all .15s;border:1px solid var(--g200);background:#fff;color:var(--g400)}
-.fc.on{background:var(--primary);color:#fff;border-color:var(--primary)}
-.shelf-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.shelf-card{background:#fff;border-radius:10px;border:1px solid var(--g200);padding:12px;cursor:pointer;transition:border-color .15s}
-.shelf-card:hover{border-color:var(--primary-mid)}
-.shelf-type{font-size:11px;color:var(--g400);margin-bottom:5px}
-.shelf-name{font-size:15px;font-weight:500;color:var(--g900);line-height:1.4;margin-bottom:3px}
-.shelf-sub{font-size:12px;color:var(--g400)}
-.shelf-bar{height:2px;border-radius:2px;background:var(--g100);margin-top:10px}
-.shelf-fill{height:100%;border-radius:2px;background:var(--primary)}
-.shelf-empty{border:1px dashed var(--g200);background:var(--g50);display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:88px;border-radius:10px;color:var(--g400);font-size:12px;gap:4px}
+.shelf-title{font-size:21px;font-weight:800;letter-spacing:-.02em;margin-bottom:3px}
+.shelf-total{font-size:14px;color:var(--muted)}
+.shelf-section{margin-bottom:26px}
+.shelf-section-hd{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px}
+.shelf-section-type{font-size:14px;font-weight:700}
+.shelf-section-count{font-size:13px;color:var(--muted)}
+.shelf-row{display:flex;gap:14px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;margin:0 -26px;padding:2px 26px 4px}
+.shelf-row::-webkit-scrollbar{display:none}
+.shelf-card{flex:0 0 auto;width:88px;cursor:pointer}
+.shelf-cover{height:116px;border-radius:10px;position:relative;overflow:hidden;box-shadow:0 4px 14px rgba(0,0,0,.10);background-size:cover;background-position:center}
+.shelf-cover img{width:100%;height:100%;object-fit:cover;display:block}
+.shelf-cover .spine{position:absolute;left:0;top:0;bottom:0;width:4px;background:rgba(0,0,0,.07)}
+.shelf-cover .l1{position:absolute;left:11px;right:11px;top:16px;height:3px;border-radius:2px;background:rgba(0,0,0,.18)}
+.shelf-cover .l2{position:absolute;left:11px;right:20px;top:23px;height:3px;border-radius:2px;background:rgba(0,0,0,.10)}
+.shelf-cover .cnt{position:absolute;left:11px;bottom:10px;font-size:10px;font-weight:700;color:rgba(0,0,0,.35)}
+.shelf-name{margin-top:7px;font-size:12px;font-weight:600;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.shelf-empty{padding:60px 0;text-align:center;color:var(--muted);font-size:14px}
+.shelf-empty .ei{font-size:32px;margin-bottom:10px}
 
-/* 책장 상세 모달 */
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:100;align-items:flex-end;justify-content:center}
-.modal-overlay.open{display:flex}
-.modal-sheet{background:#fff;border-radius:20px 20px 0 0;width:100%;max-width:480px;padding:20px 20px 40px;max-height:80vh;overflow-y:auto}
-.modal-handle{width:36px;height:4px;border-radius:2px;background:var(--g200);margin:0 auto 16px}
-.modal-title{font-size:16px;font-weight:600;margin-bottom:4px}
-.modal-sub{font-size:12px;color:var(--g400);margin-bottom:16px}
-.modal-items{display:flex;flex-direction:column;gap:10px}
+/* 책장 드릴다운 패널 */
+.shelf-detail-overlay{display:none;position:fixed;inset:0;background:var(--bg);z-index:100;flex-direction:column}
+.shelf-detail-overlay.open{display:flex;animation:slideRight .24s ease-out forwards}
+@keyframes slideRight{from{transform:translateX(100%)}to{transform:translateX(0)}}
+.shelf-detail-hd{flex-shrink:0;display:flex;align-items:center;gap:12px;padding:18px 26px 14px;border-bottom:1px solid var(--line)}
+.shelf-detail-back{cursor:pointer;width:36px;height:36px;display:flex;align-items:center;justify-content:center;margin-left:-8px;flex-shrink:0}
+.shelf-detail-title{font-size:17px;font-weight:800;letter-spacing:-.02em}
+.shelf-detail-sub{font-size:13px;color:var(--muted);margin-top:2px}
+.shelf-detail-list{flex:1;overflow-y:auto;padding:8px 26px 24px}
+.shelf-detail-item{padding:18px 0;border-bottom:1px solid var(--line);position:relative}
+.shelf-detail-q{font-size:15px;line-height:1.65;font-weight:600;padding-right:24px}
+.shelf-detail-meta{font-size:13px;color:var(--muted);margin-top:7px}
+.shelf-detail-del{position:absolute;top:18px;right:0;background:none;border:none;font-size:14px;color:var(--g200);cursor:pointer;line-height:1;padding:2px 4px}
+.shelf-detail-del:hover{color:#e24b4a}
 
-/* 리마인드탭 */
-.remind-list{display:flex;flex-direction:column;gap:10px}
-.remind-card{background:#fff;border-radius:12px;border:1px solid var(--g200);padding:16px}
-.remind-ago{font-size:10px;color:var(--primary);font-weight:500;letter-spacing:.3px;margin-bottom:8px}
-.remind-acts{display:flex;gap:6px;margin-top:12px}
-.remind-act{flex:1;font-size:12px;text-align:center;padding:7px;border-radius:8px;border:1px solid var(--g200);color:var(--g400);cursor:pointer;font-family:'Pretendard',sans-serif;transition:all .15s}
-.remind-act:hover{background:var(--g100)}
-.remind-act.primary{background:var(--primary-light);color:var(--primary-dark);border-color:var(--primary-light);font-weight:500}
-.remind-act.primary:hover{opacity:.85}
+/* 리마인드 풀스크린 오버레이 */
+.remind-overlay{display:none;position:fixed;inset:0;background:var(--bg);z-index:150;flex-direction:column}
+.remind-overlay.open{display:flex}
+.remind-topbar{flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:18px 26px 4px}
+.remind-topbar-label{font-size:12px;font-weight:700;letter-spacing:.16em;color:var(--muted);text-transform:uppercase}
+.remind-close,.remind-share{cursor:pointer;width:36px;height:36px;display:flex;align-items:center;justify-content:center;color:var(--ink)}
+.remind-share{color:var(--muted)}
+.remind-banner-wrap{flex-shrink:0;padding:14px 26px 0}
+.remind-banner{height:144px;border-radius:18px;border:1px solid rgba(0,0,0,.06);position:relative;overflow:hidden;display:flex;align-items:flex-end;padding:16px 20px;background-size:cover;background-position:center}
+.remind-banner img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.remind-banner-dot{position:absolute;top:16px;right:20px;width:26px;height:26px;border:2px solid rgba(0,0,0,.18);border-radius:50%}
+.remind-banner-type{font-size:11px;font-weight:700;letter-spacing:.14em;color:rgba(0,0,0,.38);text-transform:uppercase;margin-bottom:3px;position:relative;z-index:1}
+.remind-banner-src{font-size:21px;font-weight:800;color:rgba(0,0,0,.72);letter-spacing:-.02em;position:relative;z-index:1}
+.remind-quote-area{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:center;padding:18px 36px 0}
+.remind-date-label{font-size:13px;font-weight:600;color:var(--muted);margin-bottom:18px}
+.remind-quote{font-size:24px;line-height:1.6;font-weight:700;letter-spacing:-.025em;margin:0;display:-webkit-box;-webkit-line-clamp:6;-webkit-box-orient:vertical;overflow:hidden}
+.remind-dots{display:flex;gap:6px;justify-content:center;padding:14px 0 8px;flex-shrink:0;flex-wrap:wrap;max-width:100%;overflow:hidden;max-height:30px}
+.remind-dot{display:inline-block;height:3px;border-radius:2px;background:var(--g200);transition:width .22s ease,background .22s ease}
+.remind-dot.on{width:18px;background:var(--ink)}
+.remind-dot:not(.on){width:6px}
+.remind-nav{flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:6px 30px 28px}
+.remind-nav-btn{cursor:pointer;width:44px;height:44px;display:flex;align-items:center;justify-content:center;background:none;border:none;color:var(--muted)}
+.remind-nav-btn.next{color:var(--ink)}
+.remind-archive{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:600;cursor:pointer;background:none;border:none;color:var(--ink);font-family:'Pretendard',sans-serif}
+.remind-archive:hover{opacity:.7}
 
 /* 선택 탭 (기록/통계/스트릭) */
 .opt-tab-wrap{display:none}
@@ -195,32 +230,33 @@ html,body{background:var(--g50);font-family:'Pretendard',-apple-system,sans-seri
 .sn .l{font-size:10px;color:var(--g400)}
 
 /* 설정 시트 */
-.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:200;align-items:flex-end;justify-content:center}
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.32);z-index:200;align-items:flex-end;justify-content:center}
 .overlay.open{display:flex}
-.settings-sheet{background:#fff;border-radius:20px 20px 0 0;width:100%;max-width:480px;padding:20px 20px 40px;max-height:85vh;overflow-y:auto}
-.sheet-handle{width:36px;height:4px;border-radius:2px;background:var(--g200);margin:0 auto 18px}
-.sheet-title{font-size:15px;font-weight:600;margin-bottom:20px}
+.settings-sheet{background:var(--bg);border-radius:28px 28px 0 0;width:100%;max-width:480px;padding:14px 24px 38px;max-height:85vh;overflow-y:auto}
+.sheet-handle{width:36px;height:4px;border-radius:2px;background:var(--thumb-track);margin:0 auto 18px}
+.sheet-title{font-size:17px;font-weight:800;letter-spacing:-.02em;margin-bottom:18px}
 .sheet-sec{margin-bottom:24px}
-.sheet-sec-title{font-size:11px;font-weight:500;color:var(--g400);letter-spacing:.4px;margin-bottom:12px}
-.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--g100)}
+.sheet-sec-title{font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;margin-bottom:12px}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--line)}
 .toggle-row:last-child{border-bottom:none}
-.toggle-lbl{font-size:14px;color:var(--g900)}
-.toggle-sub{font-size:11px;color:var(--g400);margin-top:2px}
-.toggle{width:40px;height:24px;border-radius:12px;background:var(--g200);position:relative;cursor:pointer;transition:background .2s;flex-shrink:0}
-.toggle.on{background:var(--primary)}
-.toggle-knob{width:18px;height:18px;border-radius:50%;background:#fff;position:absolute;top:3px;left:3px;transition:left .2s}
-.toggle.on .toggle-knob{left:19px}
+.toggle-lbl{font-size:15px;font-weight:500;color:var(--ink)}
+.toggle-sub{font-size:13px;color:var(--muted);margin-top:2px}
+.toggle{width:44px;height:26px;border-radius:13px;background:var(--thumb-track);position:relative;cursor:pointer;transition:background .2s;flex-shrink:0}
+.toggle.on{background:var(--ink)}
+.toggle-knob{width:20px;height:20px;border-radius:50%;background:var(--bg);position:absolute;top:3px;left:2px;box-shadow:0 1px 4px rgba(0,0,0,.18);transition:left .2s}
+.toggle.on .toggle-knob{left:22px}
 .theme-swatches{display:flex;gap:12px;flex-wrap:wrap}
 .swatch{width:34px;height:34px;border-radius:50%;cursor:pointer;border:3px solid transparent;transition:transform .15s,border-color .15s}
-.swatch.on{border-color:var(--g900);transform:scale(1.12)}
-.data-btns{display:flex;flex-direction:column;gap:8px}
-.data-btn{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:10px;border:1px solid var(--g200);background:var(--g50);cursor:pointer;font-family:'Pretendard',sans-serif;font-size:13px;color:var(--g900);transition:background .15s;width:100%;text-align:left}
-.data-btn:hover{background:var(--g100)}
-.data-btn-icon{color:var(--g400);flex-shrink:0}
-.data-btn-label{font-weight:500;font-size:13px}
-.data-btn-desc{font-size:11px;color:var(--g400);margin-top:1px}
-.data-btn.danger .data-btn-label{color:#e24b4a}
-.data-btn.danger .data-btn-icon{color:#e24b4a}
+.swatch.on{border-color:var(--ink);transform:scale(1.12)}
+.data-btns{display:flex;flex-direction:column}
+.data-btn{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 0;border-bottom:1px solid var(--line);background:none;border-left:none;border-right:none;border-top:none;cursor:pointer;font-family:'Pretendard',sans-serif;font-size:15px;color:var(--ink);transition:opacity .15s;width:100%;text-align:left}
+.data-btn:last-child{border-bottom:none}
+.data-btn:hover{opacity:.7}
+.data-btn-icon{color:var(--muted);flex-shrink:0}
+.data-btn-label{font-weight:500;font-size:15px;color:var(--muted)}
+.data-btn-desc{display:none}
+.data-btn.danger .data-btn-label{color:#C0603C}
+.data-btn.danger .data-btn-icon{color:#C0603C}
 
 /* 공통 */
 .empty{padding:48px 16px;text-align:center;color:var(--g400);font-size:13px}
@@ -344,34 +380,15 @@ html,body{background:var(--g50);font-family:'Pretendard',-apple-system,sans-seri
 <!-- 헤더 -->
 <div class="hd">
   <div class="logo">
-    <div class="logo-icon">
-      <svg width="18" height="18" viewBox="0 0 512 512">
-        <rect x="60" y="100" width="150" height="200" rx="8" fill="#fff" opacity="0.95"/>
-        <rect x="80" y="140" width="110" height="10" rx="5" fill="#c8c6e8"/>
-        <rect x="80" y="165" width="110" height="10" rx="5" fill="#c8c6e8"/>
-        <rect x="80" y="190" width="80" height="10" rx="5" fill="#c8c6e8"/>
-        <rect x="80" y="218" width="100" height="14" rx="6" fill="#534ab7"/>
-        <rect x="220" y="100" width="150" height="200" rx="8" fill="#fff" opacity="0.95"/>
-        <rect x="240" y="140" width="110" height="10" rx="5" fill="#c8c6e8"/>
-        <rect x="240" y="165" width="88" height="10" rx="5" fill="#c8c6e8"/>
-        <rect x="240" y="190" width="100" height="10" rx="5" fill="#c8c6e8"/>
-        <rect x="240" y="218" width="84" height="14" rx="6" fill="#534ab7"/>
-        <rect x="205" y="100" width="20" height="200" rx="2" fill="#3c3489" opacity="0.5"/>
-        <g transform="translate(330,282) rotate(-40)">
-          <rect x="-10" y="-62" width="20" height="65" rx="6" fill="#fff"/>
-          <polygon points="-10,3 10,3 0,22" fill="#eeedfe"/>
-          <rect x="-10" y="-62" width="20" height="14" rx="5" fill="#eeedfe" opacity="0.7"/>
-        </g>
-      </svg>
-    </div>
     <div class="logo-text">underline.</div>
+    <div class="logo-underline"></div>
   </div>
   <div class="hd-right">
     <div class="today-pill" id="todayPill"></div>
     <div class="settings-btn" onclick="openSettings()" title="설정">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <circle cx="12" cy="12" r="3"/>
-        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+      <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+        <circle cx="12" cy="12" r="3.2"/>
+        <path d="M12 3v2.5M12 18.5V21M21 12h-2.5M5.5 12H3M18 6l-1.8 1.8M7.8 16.2 6 18M18 18l-1.8-1.8M7.8 7.8 6 6" stroke-linecap="round"/>
       </svg>
     </div>
   </div>
@@ -390,7 +407,7 @@ html,body{background:var(--g50);font-family:'Pretendard',-apple-system,sans-seri
 <div class="tabs" id="tabBar">
   <div class="tab on" id="tab-excerpt" onclick="sw('excerpt',this)">발췌</div>
   <div class="tab" id="tab-shelf" onclick="sw('shelf',this)">책장</div>
-  <div class="tab" id="tab-remind" onclick="sw('remind',this)">리마인드</div>
+  <div class="tab" id="tab-remind" onclick="openRemind()">리마인드</div>
   <div class="tab opt-tab-wrap" id="tab-log" onclick="sw('log',this)">기록</div>
   <div class="tab opt-tab-wrap" id="tab-stats" onclick="sw('stats',this)">통계</div>
   <div class="tab opt-tab-wrap" id="tab-streak" onclick="sw('streak',this)">스트릭</div>
@@ -454,24 +471,64 @@ html,body{background:var(--g50);font-family:'Pretendard',-apple-system,sans-seri
 
 <!-- 책장 탭 -->
 <div class="sec" id="sec-shelf">
-  <div class="filter-scroll" id="shelfFilter"></div>
-  <div class="shelf-grid" id="shelfGrid"></div>
-</div>
-
-<!-- 책장 상세 모달 -->
-<div class="modal-overlay" id="shelfModal" onclick="shelfModalClick(event)">
-  <div class="modal-sheet">
-    <div class="modal-handle"></div>
-    <div class="modal-title" id="shelfModalTitle"></div>
-    <div class="modal-sub" id="shelfModalSub"></div>
-    <div class="modal-items" id="shelfModalItems"></div>
+  <div style="padding:6px 0 16px">
+    <div class="shelf-title">책장</div>
+    <div class="shelf-total" id="shelfTotal"></div>
   </div>
+  <div id="shelfSections"></div>
 </div>
 
-<!-- 리마인드 탭 -->
-<div class="sec" id="sec-remind">
-  <div style="font-size:12px;color:var(--g400);margin-bottom:12px">저장한 문장을 다시 꺼내 읽어요</div>
-  <div id="remindList"></div>
+<!-- 책장 드릴다운 -->
+<div class="shelf-detail-overlay" id="shelfDetail">
+  <div class="shelf-detail-hd">
+    <div class="shelf-detail-back" onclick="closeShelfDetail()">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div>
+      <div class="shelf-detail-title" id="shelfDetailTitle"></div>
+      <div class="shelf-detail-sub" id="shelfDetailSub"></div>
+    </div>
+  </div>
+  <div class="shelf-detail-list" id="shelfDetailList"></div>
+</div>
+
+<!-- 리마인드 풀스크린 오버레이 -->
+<div class="remind-overlay" id="remindOverlay">
+  <div class="remind-topbar">
+    <div class="remind-close" onclick="closeRemind()">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M18 6 6 18M6 6l12 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+    </div>
+    <div class="remind-topbar-label">리마인드</div>
+    <div class="remind-share" onclick="shareExcerpt(remindQueue[remindIdx]?.id)">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 12v7a1 1 0 001 1h14a1 1 0 001-1v-7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M12 15V3M8 7l4-4 4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+  </div>
+  <div class="remind-banner-wrap">
+    <div class="remind-banner" id="remindBanner">
+      <div class="remind-banner-dot"></div>
+      <div>
+        <div class="remind-banner-type" id="remindBannerType"></div>
+        <div class="remind-banner-src" id="remindBannerSrc"></div>
+      </div>
+    </div>
+  </div>
+  <div class="remind-quote-area">
+    <div class="remind-date-label" id="remindDateLabel"></div>
+    <blockquote class="remind-quote" id="remindQuoteEl"></blockquote>
+  </div>
+  <div class="remind-dots" id="remindDots"></div>
+  <div class="remind-nav">
+    <button class="remind-nav-btn" onclick="remindPrev()">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <button class="remind-archive" onclick="openExcerptPopup(remindQueue[remindIdx]?.id)">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+      자세히
+    </button>
+    <button class="remind-nav-btn next" onclick="remindNext()">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </div>
 </div>
 
 <!-- 기록 탭 (선택) -->
@@ -598,21 +655,20 @@ html,body{background:var(--g50);font-family:'Pretendard',-apple-system,sans-seri
       <div class="sheet-sec-title">데이터 관리</div>
       <div class="data-btns">
         <button class="data-btn" onclick="shareApp()">
-          <svg class="data-btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-          <div><div class="data-btn-label">앱 공유하기</div><div class="data-btn-desc">underline. 링크를 친구에게 공유해요</div></div>
+          <span class="data-btn-label">앱 공유하기</span>
+          <svg class="data-btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
         <button class="data-btn" onclick="exportJSON()">
-          <svg class="data-btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          <div><div class="data-btn-label">JSON으로 내보내기</div><div class="data-btn-desc">다른 기기에서 불러올 수 있어요</div></div>
+          <span class="data-btn-label">JSON으로 내보내기</span>
+          <svg class="data-btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
         <button class="data-btn" onclick="document.getElementById('importFile').click()">
-          <svg class="data-btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-          <div><div class="data-btn-label">JSON 가져오기</div><div class="data-btn-desc">내보낸 파일을 불러와요 (기존 데이터에 병합)</div></div>
+          <span class="data-btn-label">JSON 가져오기</span>
+          <svg class="data-btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
         <input type="file" id="importFile" accept=".json" style="display:none" onchange="importJSON(event)">
         <button class="data-btn danger" onclick="confirmReset()">
-          <svg class="data-btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
-          <div><div class="data-btn-label">데이터 초기화</div><div class="data-btn-desc">모든 발췌 기록이 삭제돼요</div></div>
+          <span class="data-btn-label">데이터 초기화</span>
         </button>
       </div>
     </div>
@@ -638,13 +694,13 @@ let opts = JSON.parse(localStorage.getItem('ul-opts')||'{"log":false,"stats":fal
 let dc = null;
 
 const TYPE_META = {
-  book:    {label:'📖 책',     cls:'tt-book'},
-  article: {label:'📰 아티클',  cls:'tt-article'},
-  lecture: {label:'🎓 강의',   cls:'tt-lecture'},
-  music:   {label:'🎵 음악',   cls:'tt-music'},
-  podcast: {label:'🎧 팟캐스트',cls:'tt-podcast'},
-  video:   {label:'▶ 영상',    cls:'tt-video'},
-  etc:     {label:'✏️ 기타',   cls:'tt-etc'},
+  book:    {label:'📖 책',     cls:'tt-book',    bg:'#C2CEDB', name:'책'},
+  article: {label:'📰 아티클',  cls:'tt-article', bg:'#D4CCBA', name:'아티클'},
+  lecture: {label:'🎓 강의',   cls:'tt-lecture', bg:'#C9D3CE', name:'강의'},
+  music:   {label:'🎵 음악',   cls:'tt-music',   bg:'#E9DDBE', name:'음악'},
+  podcast: {label:'🎧 팟캐스트',cls:'tt-podcast', bg:'#D6B8AC', name:'팟캐스트'},
+  video:   {label:'▶ 영상',    cls:'tt-video',   bg:'#D8CFC2', name:'영상'},
+  etc:     {label:'✏️ 기타',   cls:'tt-etc',     bg:'#D8D4CC', name:'기타'},
 };
 
 const THEMES = [
@@ -723,7 +779,6 @@ function sw(name,el){
   document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));
   document.getElementById('sec-'+name).classList.add('on');
   if(name==='shelf') renderShelf();
-  if(name==='remind') renderRemind();
   if(name==='stats'){ statsYear=new Date().getFullYear(); statsMonth=new Date().getMonth(); renderStats(); }
   if(name==='streak'){ streakYear=new Date().getFullYear(); streakMonth=new Date().getMonth(); renderStreak(); }
 }
@@ -813,18 +868,30 @@ function updateDriveUI(){
       <svg id="driveSyncIco" class="drive-sync-ico" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
       <span class="drive-status" id="driveSyncTime">동기화 준비</span></div>
       <button class="drive-btn" onclick="driveLogout()">로그아웃</button>`;
-    if(sec)sec.innerHTML=`<div style="display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:10px;background:var(--t100);border:1px solid var(--g200)">
-      ${driveUser.picture?`<img class="drive-avatar" src="${driveUser.picture}" referrerpolicy="no-referrer" style="width:28px;height:28px">`:''}
-      <div><div style="font-size:13px;font-weight:500">${driveUser.name||''}</div><div style="font-size:11px;color:var(--g400)">${driveUser.email||''}</div></div>
-      <button class="drive-btn" style="margin-left:auto" onclick="driveLogout();closeSettings()">로그아웃</button></div>
-      <div style="font-size:11px;color:var(--g400);margin-top:8px;line-height:1.6">저장/수정 시 Drive에 자동 동기화돼요.<br>앱 전용 폴더(appDataFolder)에 저장되며 다른 파일에 접근하지 않아요.</div>`;
+    if(sec)sec.innerHTML=`
+      <div class="toggle-row">
+        <div style="display:flex;align-items:center;gap:10px">
+          ${driveUser.picture?`<img class="drive-avatar" src="${driveUser.picture}" referrerpolicy="no-referrer" style="width:28px;height:28px">`:''}
+          <div>
+            <div class="toggle-lbl">${driveUser.name||''}</div>
+            <div class="toggle-sub">${driveUser.email||''}</div>
+          </div>
+        </div>
+        <button class="drive-btn" onclick="driveLogout();closeSettings()">로그아웃</button>
+      </div>
+      <div style="font-size:13px;color:var(--muted);margin-top:10px;line-height:1.6">저장/수정 시 Drive에 자동 동기화돼요.<br>앱 전용 폴더(appDataFolder)에 저장되며 다른 파일에 접근하지 않아요.</div>`;
   }else{
     bar.innerHTML=`<div class="drive-user"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--g200)"><path d="M22 12V6l-8-4-8 4v6c0 5 8 8 8 8s8-3 8-8z"/></svg>
-      <span style="color:var(--g400)">로그인하면 Drive에 자동 저장돼요</span></div>
+      <span style="color:var(--muted)">로그인하면 Drive에 자동 저장돼요</span></div>
       <button class="drive-btn primary" onclick="driveLogin()">Google 로그인</button>`;
-    if(sec)sec.innerHTML=`<button class="data-btn" onclick="driveLogin()">
-      <svg class="data-btn-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12V6l-8-4-8 4v6c0 5 8 8 8 8s8-3 8-8z"/></svg>
-      <div><div class="data-btn-label">Google로 로그인</div><div class="data-btn-desc">Drive에 자동 저장 · 기기 간 동기화</div></div></button>`;
+    if(sec)sec.innerHTML=`
+      <div class="toggle-row">
+        <div>
+          <div class="toggle-lbl">Google Drive 동기화</div>
+          <div class="toggle-sub">로그인하면 자동 저장</div>
+        </div>
+        <button class="drive-btn" onclick="driveLogin()">로그인</button>
+      </div>`;
   }
 }
 
@@ -899,9 +966,26 @@ function excerptPopupClick(ev){ if(ev.target===document.getElementById('excerptP
 
 function delExcerpt(id){ excerpts=excerpts.filter(e=>e.id!==id); save(); renderExcerpts(); renderRemindHero(); renderRecentCovers(); }
 
+function coverThumbHTML(e,size){
+  // size: 'list' (42x56) or 'hero' (76x76)
+  const bg=TYPE_META[e.type]?.bg||TYPE_META.etc.bg;
+  if(e.cover){
+    return `<div class="${size==='hero'?'remind-hero-cover':'excerpt-cover-thumb'}" style="background-color:${bg}"><img src="${e.cover}"></div>`;
+  }
+  if(size==='hero'){
+    return `<div class="remind-hero-cover" style="background-color:${bg}">
+      <div class="remind-hero-cover-dot"></div>
+      <div class="remind-hero-cover-type">${TYPE_META[e.type]?.name||'기타'}</div>
+    </div>`;
+  }
+  return `<div class="excerpt-cover-thumb" style="background-color:${bg}">
+    <div class="line1"></div><div class="line2"></div>
+  </div>`;
+}
+
 function typeTag(type){
   const m=TYPE_META[type]||TYPE_META.etc;
-  return `<span class="type-tag ${m.cls}">${m.label}</span>`;
+  return `<span class="type-tag">${m.name}</span>`;
 }
 
 function updateSrcSuggestions(){
@@ -954,27 +1038,26 @@ function renderExcerpts(){
     const dayLabel=`${exMonth+1}월 ${d.getDate()}일 ${DAYS[d.getDay()]}요일`;
     const safeKey=date.replace(/-/g,'');
     const items=grouped[date].map(e=>`
-      <div class="excerpt-item" onclick="openExcerptPopup(${e.id})" style="${e.cover?'display:flex;gap:12px;align-items:flex-start':''}">
+      <div class="excerpt-item" onclick="openExcerptPopup(${e.id})">
         <button class="excerpt-del" onclick="event.stopPropagation();delExcerpt(${e.id})">×</button>
-        ${e.cover?`<img src="${e.cover}" style="width:44px;height:44px;border-radius:8px;object-fit:cover;flex-shrink:0">`:''}
-        <div style="flex:1;min-width:0">
+        ${coverThumbHTML(e,'list')}
+        <div class="excerpt-body">
           <div class="excerpt-q">${e.text}</div>
           <div class="excerpt-foot">
-            ${e.src?`<span class="excerpt-src">${e.src}</span>`:''}
-            ${typeTag(e.type)}
+            ${e.src?`<span class="excerpt-src">${e.src} · ${TYPE_META[e.type]?.name||'기타'}</span>`:`<span class="excerpt-src">${TYPE_META[e.type]?.name||'기타'}</span>`}
           </div>
         </div>
       </div>`).join('');
     return `
-      <div class="card" style="padding:0;overflow:hidden;margin-bottom:8px">
-        <div onclick="toggleExDay('${safeKey}')" style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;cursor:pointer;user-select:none">
-          <div style="display:flex;align-items:center;gap:8px">
-            <span id="exa-${safeKey}" style="font-size:14px;color:var(--g400);line-height:1">${isToday?'⌄':'›'}</span>
-            <span style="font-size:13px;font-weight:600;color:${isToday?'var(--primary)':'var(--g900)'}">${dayLabel}${isToday?' <span style="font-size:10px;background:var(--primary);color:#fff;padding:1px 6px;border-radius:10px;margin-left:4px">오늘</span>':''}</span>
+      <div style="margin-bottom:8px">
+        <div onclick="toggleExDay('${safeKey}')" class="group-hd" style="cursor:pointer;user-select:none">
+          <div style="display:flex;align-items:center">
+            <span>${dayLabel}</span>
+            ${isToday?'<span class="group-hd-badge">오늘</span>':''}
           </div>
-          <span style="font-size:12px;color:var(--g400);font-weight:500">${grouped[date].length}개</span>
+          <span class="group-hd-count">${grouped[date].length}개</span>
         </div>
-        <div id="exb-${safeKey}" style="display:${isToday?'block':'none'};padding:0 14px 12px;border-top:1px solid var(--g100)">
+        <div id="exb-${safeKey}" style="display:${isToday?'block':'none'}">
           ${items}
         </div>
       </div>`;
@@ -982,10 +1065,8 @@ function renderExcerpts(){
 }
 
 function toggleExDay(k){
-  const b=document.getElementById('exb-'+k), a=document.getElementById('exa-'+k);
-  const open=b.style.display!=='none';
-  b.style.display=open?'none':'block';
-  a.textContent=open?'›':'⌄';
+  const b=document.getElementById('exb-'+k);
+  b.style.display=b.style.display!=='none'?'none':'block';
 }
 
 // ── 리마인드 히어로 (발췌탭 상단) ─────────────────────
@@ -995,10 +1076,11 @@ function renderRemindHero(){
 
   if(!excerpts.length){
     el.innerHTML=`
-      <div class="remind-hero" style="opacity:.7">
-        <div class="remind-hero-eye">✦ 리마인드</div>
-        <div style="font-size:13px;color:rgba(255,255,255,.7);line-height:1.8">발췌를 저장하면<br>이곳에 다시 꺼내드려요</div>
-      </div>`;
+      <div class="remind-hero" style="cursor:default">
+        <div class="remind-hero-eye">리마인드</div>
+        <div style="font-size:15px;color:var(--muted);line-height:1.7">발췌를 저장하면<br>이곳에 다시 꺼내드려요</div>
+      </div>
+      <div class="remind-hero-divider"></div>`;
     return;
   }
 
@@ -1006,19 +1088,26 @@ function renderRemindHero(){
   const pool=older.length?older:excerpts;
   const pick=pool[Math.floor(Math.random()*Math.min(pool.length,10))];
   const daysAgo=Math.round((new Date(todayStr)-new Date(pick.date))/(1000*60*60*24));
-  const eyebrow=daysAgo===0?'✦ 오늘의 발췌':`✦ ${daysAgo}일 전 오늘`;
+  const eyebrow=daysAgo===0?'오늘 다시 만난 문장':`${daysAgo}일 전 오늘`;
   el.innerHTML=`
-    <div class="remind-hero" onclick="openExcerptPopup(${pick.id})">
-      <div>
-        <div class="remind-hero-eye">${eyebrow}</div>
+    <div class="remind-hero">
+      <div class="remind-hero-eye">${eyebrow}</div>
+      <div class="remind-hero-body" onclick="openExcerptPopup(${pick.id})">
         <div class="remind-hero-q">${pick.text}</div>
-        ${pick.src?`<div class="remind-hero-src">— ${pick.src}</div>`:''}
+        ${coverThumbHTML(pick,'hero')}
       </div>
+      ${pick.src?`<div class="remind-hero-src">${pick.src}</div>`:''}
       <div class="remind-hero-acts">
-        <button class="remind-hero-btn" onclick="event.stopPropagation();renderRemindHero()">다음 문장</button>
-        <button class="remind-hero-btn" onclick="event.stopPropagation();shareExcerpt(${pick.id})">공유</button>
+        <button class="remind-hero-btn" onclick="event.stopPropagation();renderRemindHero()">다음 문장
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button class="remind-hero-btn" onclick="event.stopPropagation();shareExcerpt(${pick.id})">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M4 12v7a1 1 0 001 1h14a1 1 0 001-1v-7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M12 15V3M8 7l4-4 4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          공유
+        </button>
       </div>
-    </div>`;
+    </div>
+    <div class="remind-hero-divider"></div>`;
 }
 
 function shareExcerpt(id){
@@ -1029,92 +1118,119 @@ function shareExcerpt(id){
 }
 
 // ── 책장 ───────────────────────────────────────────────
-let shelfFilter='all';
+const TYPE_ORDER=['book','article','lecture','music','podcast','video','etc'];
 
 function renderShelf(){
-  const types=['all',...Object.keys(TYPE_META)];
-  const filterEl=document.getElementById('shelfFilter');
-  filterEl.innerHTML=types.map(t=>{
-    const label=t==='all'?'전체':TYPE_META[t].label;
-    return `<div class="fc${shelfFilter===t?' on':''}" onclick="setShelfFilter('${t}')">${label}</div>`;
-  }).join('');
+  document.getElementById('shelfTotal').textContent=`${excerpts.length}개의 밑줄`;
+  const container=document.getElementById('shelfSections');
 
-  const filtered=shelfFilter==='all'?excerpts:excerpts.filter(e=>e.type===shelfFilter);
-  const srcMap={};
-  filtered.forEach(e=>{
-    const key=e.src||'(출처 없음)';
-    if(!srcMap[key])srcMap[key]={src:key,type:e.type,count:0};
-    srcMap[key].count++;
-  });
-  const srcs=Object.values(srcMap).sort((a,b)=>b.count-a.count);
-  const maxCount=srcs[0]?.count||1;
-  const grid=document.getElementById('shelfGrid');
-  if(!srcs.length){
-    grid.innerHTML=`<div class="shelf-empty" style="grid-column:1/-1"><div style="font-size:28px">📚</div><div>발췌를 추가하면 여기에 쌓여요</div></div>`;
+  if(!excerpts.length){
+    container.innerHTML=`<div class="shelf-empty"><div class="ei">📚</div>발췌를 추가하면 여기에 쌓여요</div>`;
     return;
   }
-  grid.innerHTML=srcs.map(s=>`
-    <div class="shelf-card" onclick="openShelfModal('${encodeURIComponent(s.src)}')">
-      <div class="shelf-type">${TYPE_META[s.type]?.label||'✏️ 기타'}</div>
-      <div class="shelf-name">${s.src}</div>
-      <div class="shelf-sub">${s.count}문장</div>
-      <div class="shelf-bar"><div class="shelf-fill" style="width:${Math.round(s.count/maxCount*100)}%"></div></div>
-    </div>`).join('');
+
+  container.innerHTML=TYPE_ORDER.map(type=>{
+    const typeExcerpts=excerpts.filter(e=>e.type===type);
+    if(!typeExcerpts.length)return '';
+    const srcMap={};
+    typeExcerpts.forEach(e=>{
+      const key=e.src||'(출처 없음)';
+      if(!srcMap[key])srcMap[key]={src:key,type:e.type,count:0,cover:e.cover};
+      srcMap[key].count++;
+      if(!srcMap[key].cover&&e.cover)srcMap[key].cover=e.cover;
+    });
+    const srcs=Object.values(srcMap).sort((a,b)=>b.count-a.count);
+    const bg=TYPE_META[type]?.bg||TYPE_META.etc.bg;
+    const cards=srcs.map(s=>`
+      <div class="shelf-card" onclick="openShelfDetail('${encodeURIComponent(s.src)}')">
+        <div class="shelf-cover" style="background-color:${bg}">
+          ${s.cover?`<img src="${s.cover}">`:`<div class="spine"></div><div class="l1"></div><div class="l2"></div>`}
+          <div class="cnt">${s.count}개</div>
+        </div>
+        <div class="shelf-name">${s.src}</div>
+      </div>`).join('');
+    return `
+      <div class="shelf-section">
+        <div class="shelf-section-hd">
+          <span class="shelf-section-type">${TYPE_META[type]?.name||'기타'}</span>
+          <span class="shelf-section-count">${typeExcerpts.length}개</span>
+        </div>
+        <div class="shelf-row">${cards}</div>
+      </div>`;
+  }).join('');
 }
 
-function setShelfFilter(t){ shelfFilter=t; renderShelf(); }
-
-function openShelfModal(srcEncoded){
+function openShelfDetail(srcEncoded){
   const src=decodeURIComponent(srcEncoded);
   const items=excerpts.filter(e=>(e.src||'(출처 없음)')===src);
-  document.getElementById('shelfModalTitle').textContent=src;
-  document.getElementById('shelfModalSub').textContent=`${items.length}개의 발췌`;
-  document.getElementById('shelfModalItems').innerHTML=items.map(e=>`
-    <div class="excerpt-item" style="margin-bottom:0">
-      <button class="excerpt-del" onclick="delExcerptModal(${e.id},'${srcEncoded}')">×</button>
-      <div class="excerpt-q">${e.text}</div>
-      <div class="excerpt-foot">${typeTag(e.type)}<span style="font-size:10px;color:var(--g200);margin-left:auto">${e.date}</span></div>
+  document.getElementById('shelfDetailTitle').textContent=src;
+  document.getElementById('shelfDetailSub').textContent=`${items.length}개의 밑줄`;
+  document.getElementById('shelfDetailList').innerHTML=items.map(e=>`
+    <div class="shelf-detail-item">
+      <button class="shelf-detail-del" onclick="delExcerptDetail(${e.id},'${srcEncoded}')">×</button>
+      <div class="shelf-detail-q">${e.text}</div>
+      <div class="shelf-detail-meta">${TYPE_META[e.type]?.name||'기타'}</div>
     </div>`).join('');
-  document.getElementById('shelfModal').classList.add('open');
+  document.getElementById('shelfDetail').classList.add('open');
 }
 
-function delExcerptModal(id,srcEncoded){
+function closeShelfDetail(){ document.getElementById('shelfDetail').classList.remove('open'); }
+
+function delExcerptDetail(id,srcEncoded){
   excerpts=excerpts.filter(e=>e.id!==id); save();
-  openShelfModal(srcEncoded);
-  renderShelf();
+  const src=decodeURIComponent(srcEncoded);
+  const items=excerpts.filter(e=>(e.src||'(출처 없음)')===src);
+  if(!items.length){ closeShelfDetail(); }
+  else { openShelfDetail(srcEncoded); }
+  renderShelf(); renderRecentCovers();
 }
 
-function shelfModalClick(e){ if(e.target===document.getElementById('shelfModal')) document.getElementById('shelfModal').classList.remove('open'); }
+// ── 리마인드 풀스크린 ────────────────────────────────────
+let remindQueue=[], remindIdx=0;
 
-// ── 리마인드 탭 ────────────────────────────────────────
-function renderRemind(){
-  const el=document.getElementById('remindList');
+function openRemind(){
   if(!excerpts.length){
-    el.innerHTML='<div class="empty"><div class="ei">🔁</div>발췌를 쌓으면 다시 꺼내드려요</div>';
+    toast('발췌를 쌓으면 다시 꺼내드려요');
     return;
   }
-  const todayStr=today();
-  const shuffled=[...excerpts].sort(()=>Math.random()-.5);
-  el.innerHTML=shuffled.map(e=>{
-    const daysAgo=Math.round((new Date(todayStr)-new Date(e.date))/(1000*60*60*24));
-    const label=daysAgo===0?'오늘':daysAgo===1?'어제':`${daysAgo}일 전`;
-    return remindCardHTML(e,label);
-  }).join('');
+  remindQueue=[...excerpts].sort(()=>Math.random()-.5);
+  remindIdx=0;
+  renderRemindDots();
+  renderRemindCard();
+  document.getElementById('remindOverlay').classList.add('open');
 }
 
-function remindCardHTML(e,label){
-  return `<div class="remind-card">
-    <div class="remind-ago">${label}</div>
-    <div class="excerpt-q">${e.text}</div>
-    <div class="excerpt-foot" style="margin-top:8px">
-      ${e.src?`<span class="excerpt-src">${e.src}</span>`:''}
-      ${typeTag(e.type)}
-    </div>
-    <div class="remind-acts">
-      <button class="remind-act" onclick="this.closest('.remind-card').style.display='none'">넘기기</button>
-      <button class="remind-act primary" onclick="shareExcerpt(${e.id})">공유하기</button>
-    </div>
-  </div>`;
+function closeRemind(){ document.getElementById('remindOverlay').classList.remove('open'); }
+
+function remindNext(){ remindIdx=(remindIdx+1)%remindQueue.length; renderRemindCard(); renderRemindDots(); }
+function remindPrev(){ remindIdx=(remindIdx-1+remindQueue.length)%remindQueue.length; renderRemindCard(); renderRemindDots(); }
+
+function renderRemindCard(){
+  const e=remindQueue[remindIdx]; if(!e)return;
+  const todayStr=today();
+  const daysAgo=Math.round((new Date(todayStr)-new Date(e.date))/(1000*60*60*24));
+  const label=daysAgo===0?'오늘 저장':daysAgo===1?'어제 저장':`${daysAgo}일 전 저장`;
+  const typeName=TYPE_META[e.type]?.name||'기타';
+  const bg=TYPE_META[e.type]?.bg||TYPE_META.etc.bg;
+
+  const banner=document.getElementById('remindBanner');
+  banner.style.backgroundColor=bg;
+  banner.querySelectorAll('img').forEach(img=>img.remove());
+  if(e.cover){
+    const img=document.createElement('img');
+    img.src=e.cover;
+    banner.insertBefore(img,banner.firstChild);
+  }
+  document.getElementById('remindBannerType').textContent=typeName;
+  document.getElementById('remindBannerSrc').textContent=e.src||'출처 없음';
+  document.getElementById('remindDateLabel').textContent=`${label} · ${typeName}`;
+  document.getElementById('remindQuoteEl').textContent=e.text;
+}
+
+function renderRemindDots(){
+  const wrap=document.getElementById('remindDots');
+  const max=Math.min(remindQueue.length,12);
+  wrap.innerHTML=remindQueue.slice(0,max).map((_,i)=>`<span class="remind-dot${i===remindIdx?' on':''}"></span>`).join('');
 }
 
 // ── 기록 탭 ────────────────────────────────────────────
