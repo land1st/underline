@@ -142,10 +142,9 @@ html,body{background:var(--bg);font-family:'Pretendard',-apple-system,sans-serif
 .shelf-section-hd{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px}
 .shelf-section-type{font-size:14px;font-weight:700}
 .shelf-section-count{font-size:13px;color:var(--muted)}
-.shelf-row{display:flex;gap:14px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;margin:0 -26px;padding:2px 26px 4px}
-.shelf-row::-webkit-scrollbar{display:none}
-.shelf-card{flex:0 0 auto;width:88px;cursor:pointer}
-.shelf-cover{height:116px;border-radius:10px;position:relative;overflow:hidden;box-shadow:0 4px 14px rgba(0,0,0,.10);background-size:cover;background-position:center}
+.shelf-row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px 10px;margin:0;padding:2px 0 4px}
+.shelf-card{width:100%;cursor:pointer}
+.shelf-cover{aspect-ratio:3/4;border-radius:10px;position:relative;overflow:hidden;box-shadow:0 4px 14px rgba(0,0,0,.10);background-size:cover;background-position:center}
 .shelf-cover img{width:100%;height:100%;object-fit:cover;display:block}
 .shelf-cover .spine{position:absolute;left:0;top:0;bottom:0;width:4px;background:rgba(0,0,0,.07)}
 .shelf-cover .l1{position:absolute;left:11px;right:11px;top:16px;height:3px;border-radius:2px;background:rgba(0,0,0,.18)}
@@ -943,6 +942,7 @@ function addExcerpt(){
   excerpts.unshift({id:Date.now(),text,src,type,cover,date:today()});
   save();
   exYear=new Date().getFullYear(); exMonth=new Date().getMonth();
+  heroInitial=true;
   renderExcerpts(); renderRemindHero(); renderRecentCovers(); updateSrcSuggestions();
   document.getElementById('ex-text').value='';
   document.getElementById('ex-src').value='';
@@ -1074,6 +1074,7 @@ function toggleExDay(k){
 }
 
 // ── 리마인드 히어로 (발췌탭 상단) ─────────────────────
+let heroInitial=true;
 function renderRemindHero(){
   const el=document.getElementById('remindHero');
   const todayStr=today();
@@ -1090,7 +1091,8 @@ function renderRemindHero(){
 
   const older=excerpts.filter(e=>e.date<todayStr);
   const pool=older.length?older:excerpts;
-  const pick=pool[Math.floor(Math.random()*Math.min(pool.length,10))];
+  const pick=heroInitial?[...excerpts].sort((a,b)=>b.id-a.id)[0]:pool[Math.floor(Math.random()*Math.min(pool.length,10))];
+  heroInitial=false;
   const daysAgo=Math.round((new Date(todayStr)-new Date(pick.date))/(1000*60*60*24));
   const eyebrow=daysAgo===0?'오늘 다시 만난 문장':`${daysAgo}일 전 오늘`;
   el.innerHTML=`
